@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:layout_marginTop="30dp"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".AddCustomPlantFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="519dp"
+        android:background="@color/white">
+
+        <EditText
+            android:id="@+id/editTextPlantName"
+            android:layout_width="192dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="Enter Plant Name"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle"
+            tools:layout_editor_absoluteY="10dp" />
+
+        <EditText
+            android:id="@+id/editTextWateringPeriod"
+            android:layout_width="193dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="Enter period in days"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle4"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSetPlantingDate" />
+
+        <EditText
+            android:id="@+id/editTextFertilizingPeriod"
+            android:layout_width="193dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="Enter period in days"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle6"
+            app:layout_constraintTop_toBottomOf="@+id/editTextWateringPeriod" />
+
+        <EditText
+            android:id="@+id/editTextMonitoringPeriod"
+            android:layout_width="193dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="Enter period in days"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle7"
+            app:layout_constraintTop_toBottomOf="@+id/editTextFertilizingPeriod" />
+
+        <EditText
+            android:id="@+id/editTextVegetationPeriod"
+            android:layout_width="193dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="Enter period in days"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle8"
+            app:layout_constraintTop_toBottomOf="@+id/editTextMonitoringPeriod" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="Plant name:"
+            android:textSize="18dp"
+            tools:layout_editor_absoluteX="6dp"
+            tools:layout_editor_absoluteY="11dp" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle3"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="Planting date:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <TextView
+            android:id="@+id/textViewSetPlantingDate"
+            android:layout_width="194dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:gravity="center_vertical"
+            android:hint="Click to set date"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle3"
+            app:layout_constraintTop_toBottomOf="@+id/editTextPlantName" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle4"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="Watering period:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle3"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle6"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="Fertilizing period:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle4"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle7"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="Monitoring period:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle6"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle8"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="Vegetation period:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle7"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle9"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:text="Spring fertilizer:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle8"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle10"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
+            android:text="Summer fertilizer:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle9"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle11"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
+            android:text="Protection:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle10"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <TextView
+            android:id="@+id/textViewPlantingDateTitle12"
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
+            android:text="Bad companion:"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPlantingDateTitle11"
+            tools:layout_editor_absoluteX="6dp" />
+
+        <EditText
+            android:id="@+id/editTextSpringFertilizer"
+            android:layout_width="192dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Enter fertilizer"
+            android:inputType="textMultiLine"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle9"
+            app:layout_constraintTop_toBottomOf="@+id/editTextVegetationPeriod" />
+
+        <EditText
+            android:id="@+id/editTextSummerFertilizer"
+            android:layout_width="192dp"
+            android:layout_height="69dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Enter fertilizer"
+            android:inputType="textMultiLine"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle10"
+            app:layout_constraintTop_toBottomOf="@+id/editTextSpringFertilizer" />
+
+        <EditText
+            android:id="@+id/editTextProtection"
+            android:layout_width="192dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Enter protection"
+            android:inputType="textMultiLine"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle11"
+            app:layout_constraintTop_toBottomOf="@+id/editTextSummerFertilizer" />
+
+        <EditText
+            android:id="@+id/editTextBadCompanion"
+            android:layout_width="191dp"
+            android:layout_height="62dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Enter bad companion"
+            android:inputType="textMultiLine"
+            app:layout_constraintStart_toEndOf="@+id/textViewPlantingDateTitle12"
+            app:layout_constraintTop_toBottomOf="@+id/editTextProtection" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/teal_700"
+            android:text="CANCEL" />
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/teal_700"
+            android:text="SAVE" />
+    </LinearLayout>
+
+</LinearLayout>
