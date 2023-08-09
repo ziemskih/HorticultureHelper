@@ -2,9 +2,11 @@ package com.example.horticulturehelper;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
+
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -50,6 +53,7 @@ public class AddCustomPlantFragment extends Fragment {
     AddPlantActivity addPlantActivity = new AddPlantActivity();
     Plant plant = null;
     String reminderTime = " 12:00";
+    UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
 
 
     @Override
@@ -74,7 +78,7 @@ public class AddCustomPlantFragment extends Fragment {
         textViewSetPlantingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setPlantingDate();
+                setPlantingDate(textViewSetPlantingDate);
             }
 
         });
@@ -204,13 +208,14 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
 
 
 
-    public void setPlantingDate(){
-        // Get Current Date
+    public void setPlantingDate(TextView textView){
         final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
-
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+//        int mHour = Integer.parseInt((textView.getText().toString()).substring(11,13));
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                 new DatePickerDialog.OnDateSetListener() {
@@ -218,9 +223,21 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
-                        String date = String.format("%d-%02d-%02d", year,monthOfYear+1,dayOfMonth);
+//                        final Calendar newDate = Calendar.getInstance();
 
-                        textViewSetPlantingDate.setText(date);
+//                        date = date.concat(" 12:00");
+                        TimePickerDialog time = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                String date = String.format("%d-%02d-%02d %02d:%02d", year,monthOfYear+1,dayOfMonth,hourOfDay,minute);
+                                textView.setText(date);
+
+//                                newDate.set(year, monthOfYear, dayOfMonth, hourOfDay, minute, 0);
+                            }
+                        }, mHour, mMinute, true);
+                        time.show();
+
                     }
                 }, mYear, mMonth, mDay);
 
@@ -240,7 +257,8 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
         PendingIntent pendingIntent;
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-            pendingIntent = PendingIntent.getActivity(getContext(),
+            pendingIntent = PendingIntent.getBroadcast(getContext(),
+//          pendingIntent = PendingIntent.getActivity(getContext(),
                     reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         }else {

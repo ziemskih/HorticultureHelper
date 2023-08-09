@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -259,7 +261,9 @@ public class UpdatePlantActivity extends AppCompatActivity {
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
-
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+//        int mHour = Integer.parseInt((textView.getText().toString()).substring(11,13));
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
@@ -267,10 +271,21 @@ public class UpdatePlantActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
-                        String date = String.format("%d-%02d-%02d", year,monthOfYear+1,dayOfMonth);
-                        date = date.concat(" 12:00");
+//                        final Calendar newDate = Calendar.getInstance();
 
-                        textView.setText(date);
+//                        date = date.concat(" 12:00");
+                        TimePickerDialog time = new TimePickerDialog(UpdatePlantActivity.this, new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                String date = String.format("%d-%02d-%02d %02d:%02d", year,monthOfYear+1,dayOfMonth,hourOfDay,minute);
+                                textView.setText(date);
+
+//                                newDate.set(year, monthOfYear, dayOfMonth, hourOfDay, minute, 0);
+                            }
+                        }, mHour, mMinute, true);
+                        time.show();
+
                     }
                 }, mYear, mMonth, mDay);
 

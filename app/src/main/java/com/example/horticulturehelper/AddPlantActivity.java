@@ -123,7 +123,9 @@ public class AddPlantActivity extends AppCompatActivity {
 
         intent.putExtra("plantId", plant.getId());
         intent.putExtra("plantName", plant.getPlantName());
+        intent.putExtra("plantobj", plant);
         Log.d("hzz","setReminder0"+plant.getPlantName()+intent.getStringExtra("plantName")+intent.getIntExtra("plantId", -1));
+        Log.d("hzzz","plantname: "+plant.getPlantName()+plant.getPlantingDate()+plant.getId());
         PendingIntent pendingIntent;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
             pendingIntent = PendingIntent.getActivity(getApplicationContext(),
