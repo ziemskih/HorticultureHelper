@@ -32,7 +32,6 @@ public class UpdatePlantActivity extends AppCompatActivity {
     PlantDatabase plantDb = PlantDatabase.getInstance(getApplication());
     ViewPlantDetailsActivity v = new ViewPlantDetailsActivity();
 
-
     EditText editTextPlantName;
     TextView textViewSetPlantingDate;
     TextView textViewWateringDate;
@@ -57,7 +56,6 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
         plant = (Plant) getIntent().getSerializableExtra("plant");
         plantId = plant.getId();
-
         editTextPlantName = findViewById(R.id.editTextPlantName);
         textViewSetPlantingDate = findViewById(R.id.textViewPlantingDate);
         textViewWateringDate = findViewById(R.id.textViewWateringDate);
@@ -108,8 +106,6 @@ public class UpdatePlantActivity extends AppCompatActivity {
                 setDate(textViewHarvestingDate);
             }
         });
-
-
 
 
     }
@@ -244,10 +240,13 @@ public class UpdatePlantActivity extends AppCompatActivity {
                 }
             });
             Toast.makeText(getApplicationContext(), "Plant attributes was updated.", Toast.LENGTH_SHORT).show();
+////            if (plantOutput.getPlatingDoneStatus){
+//                //setAlarms
+//            }
         }
         else{
             Toast.makeText(getApplicationContext(), "Plant attributes was not updated. Plant name can't be empty.", Toast.LENGTH_LONG).show();
-        };
+        }
         Intent intent = new Intent(UpdatePlantActivity.this,MainActivity.class);
         startActivity(intent);
             return true;

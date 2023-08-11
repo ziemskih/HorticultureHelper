@@ -124,21 +124,17 @@ public class AddPlantActivity extends AppCompatActivity {
         intent.putExtra("plantId", lastPlantId);
         intent.putExtra("plantName", plant.getPlantName());
         intent.putExtra("eventName", "to plant");
+        intent.putExtra("plant", plant);
+
         Log.d("hzz","setReminder0"+plant.getPlantName()+intent.getStringExtra("plantName")+intent.getIntExtra("plantId", -1));
         Log.d("hzzz","plantname: "+plant.getPlantName()+plant.getPlantingDate()+plant.getId());
         PendingIntent pendingIntent;
         int reqCode = lastPlantId * 100 + 1;
-        Log.d("AddPlantActivity: reqCode = lastPlantId * 100 + 1 = ", String.valueOf(String.valueOf(reqCode)));
+        Log.d("AddPlantActivity: reqCode = lastPlantId * 100 + 1 = ", String.valueOf(reqCode));
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-            pendingIntent = PendingIntent.getActivity(getApplicationContext(),
-                    reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-        }else {
-            pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
+        pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                     reqCode, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        }
 
         Log.d("hzz","setReminder1");
         long millis = plant.getPlantingDate().getTime();

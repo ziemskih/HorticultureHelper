@@ -1,8 +1,5 @@
 package com.example.horticulturehelper;
 
-import static android.content.Intent.getIntent;
-
-import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -22,6 +19,8 @@ import java.util.concurrent.Executors;
 public class NotificationCreator extends BroadcastReceiver {
 
     private static final String CHANNEL_ID = "1";
+//    private MainActivity mainActivity = new MainActivity();
+//    PlantDatabase plantDatabase = PlantDatabase.getInstance(mainActivity.getApplicationContext());
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -37,25 +36,41 @@ public class NotificationCreator extends BroadcastReceiver {
 //        Intent contentIntent = new Intent(context, AddPlantActivity.class);
 //        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_IMMUTABLE);
 
-//        Intent updateIntent = new Intent(context, UpdatePlantActivity.class);
-//        updateIntent.putExtra("plant", plant);
-//        PendingIntent updatePendingIntent = PendingIntent.getActivity(context, 0, updateIntent, PendingIntent.FLAG_IMMUTABLE);
 
-//        int plantId = intent.getIntExtra("plantId",-1);
         Random r = new Random();
-        int notificationId = r.nextInt(75 - 18) + 18;
-        String plantName = intent.getStringExtra("plantName");
+        int randomNumber = r.nextInt(75 - 18) + 18;
+//        String plantName = intent.getStringExtra("plantName");
+        Plant plant = (Plant) intent.getSerializableExtra("plant");
         String eventName = intent.getStringExtra("eventName");
+        if (eventName.equals("to plant")) {
+
+            int plantId = intent.getIntExtra("plantId", -1);
+            plant.setId(plantId);
+        }
+        String plantName = plant.getPlantName();
+        Log.d("hzser","plantobj: "+ plant.getPlantName()+"     "+"plantId"+plant.getId());
+
+        Intent updateIntent = new Intent(context, UpdatePlantActivity.class);
+        updateIntent.putExtra("plant", plant);
+        PendingIntent updatePendingIntent = PendingIntent.getActivity(context, randomNumber, updateIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        Intent doneIntent = new Intent(context, DoneButtonReceiver.class);
+        doneIntent.putExtra("plant", plant);
+        doneIntent.putExtra("eventName", eventName);
+        PendingIntent donePendingIntent = PendingIntent.getBroadcast(context, randomNumber, doneIntent, PendingIntent.FLAG_IMMUTABLE);
+//        mainActivity.setAllPlantReminders(plant);
+
+
         Notification.Builder builder = new Notification.Builder(context,CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Reminder")
                 .setContentText("It's time " + eventName + " " + plantName);
-//        builder.addAction(R.drawable.action_button_icon, "Action button name",updatePendingIntent);
-
+        builder.addAction(R.drawable.action_button_icon, "DONE",donePendingIntent);
+        builder.addAction(R.drawable.action_button_icon, "Update plant",updatePendingIntent);
 
         NotificationManagerCompat compat = NotificationManagerCompat.from(context);
-        compat.notify(notificationId,builder.build());
-        Log.d("hzz","notificatio id: "+ notificationId);
+        compat.notify(randomNumber,builder.build());
+        Log.d("hzz","notificatio id: "+ randomNumber);
 
     }
 }

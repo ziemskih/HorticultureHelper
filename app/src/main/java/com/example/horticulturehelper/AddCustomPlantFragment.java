@@ -148,7 +148,6 @@ public class AddCustomPlantFragment extends Fragment {
         }
         else {
             Toast.makeText(getContext(), "Plant wasn't added. Plant name and planting date input is required.", Toast.LENGTH_LONG).show();
-            return;
         }
 
 
@@ -171,7 +170,7 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
         String plantWateringPeriodInt = editTextWateringPeriod.getText().toString();
         String plantFertilizingPeriodInt = editTextFertilizingPeriod.getText().toString();
         String plantMonitoringPeriodInt = editTextMonitoringPeriod.getText().toString();
-        String plantVegetationPeriodInt = editTextVegetationPeriod.getText().toString();;
+        String plantVegetationPeriodInt = editTextVegetationPeriod.getText().toString();
         String plantSpringFertilizerStr = editTextSpringFertilizer.getText().toString();
         String plantSummerFertilizerStr = editTextSummerFertilizer.getText().toString();
         String plantProtectionStr = editTextProtection.getText().toString();
@@ -254,20 +253,15 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
         intent.putExtra("plantId", lastPlantId);
         intent.putExtra("plantName", editTextPlantName.getText().toString());
         intent.putExtra("eventName", "to plant");
+        intent.putExtra("plant", plant);
+
         Log.d("hzz","setReminder0 fra from intent: "+ intent.getStringExtra("plantName"));
         int reqCode = lastPlantId * 100 + 1;
         Log.d("AddCustomPlantFragment: reqCode = lastPlantId * 100 + 1 = ", String.valueOf(reqCode));
         PendingIntent pendingIntent;
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-            pendingIntent = PendingIntent.getBroadcast(getContext(),
-//          pendingIntent = PendingIntent.getActivity(getContext(),
-                    reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-        }else {
             pendingIntent = PendingIntent.getBroadcast(getContext(),
                     reqCode, intent, PendingIntent.FLAG_IMMUTABLE);
-        }
 
         Log.d("hzz","setReminder1 textViewSetPlantingDate: "+textViewSetPlantingDate.getText().toString());
 
