@@ -248,12 +248,15 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
         Log.d("hzz","setPlantingDateReminder started: ");
 //        Date date = new Date();
         Intent intent = new Intent(getContext(),NotificationCreator.class);
-        int reqCode = 1;
 //        int reqCode = (addPlantActivity.setNextId()+1)*100+1;
         //requestCode setting with plantId*100+1
-//        intent.putExtra("plantId", plant.getId());
+        int lastPlantId = plantDb.plantDao().getLastPlantId();
+        intent.putExtra("plantId", lastPlantId);
         intent.putExtra("plantName", editTextPlantName.getText().toString());
+        intent.putExtra("eventName", "to plant");
         Log.d("hzz","setReminder0 fra from intent: "+ intent.getStringExtra("plantName"));
+        int reqCode = lastPlantId * 100 + 1;
+        Log.d("AddCustomPlantFragment: reqCode = lastPlantId * 100 + 1 = ", String.valueOf(reqCode));
         PendingIntent pendingIntent;
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {

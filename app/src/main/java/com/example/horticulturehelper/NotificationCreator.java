@@ -15,6 +15,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -40,18 +41,21 @@ public class NotificationCreator extends BroadcastReceiver {
 //        updateIntent.putExtra("plant", plant);
 //        PendingIntent updatePendingIntent = PendingIntent.getActivity(context, 0, updateIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        int plantId = intent.getIntExtra("plantId",-1);
+//        int plantId = intent.getIntExtra("plantId",-1);
+        Random r = new Random();
+        int notificationId = r.nextInt(75 - 18) + 18;
         String plantName = intent.getStringExtra("plantName");
+        String eventName = intent.getStringExtra("eventName");
         Notification.Builder builder = new Notification.Builder(context,CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Reminder")
-                .setContentText("It's time to plant " + plantName);
+                .setContentText("It's time " + eventName + " " + plantName);
 //        builder.addAction(R.drawable.action_button_icon, "Action button name",updatePendingIntent);
 
 
         NotificationManagerCompat compat = NotificationManagerCompat.from(context);
-        compat.notify(1,builder.build());
-        Log.d("hzz","setReminder34");
+        compat.notify(notificationId,builder.build());
+        Log.d("hzz","notificatio id: "+ notificationId);
 
     }
 }

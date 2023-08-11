@@ -94,10 +94,10 @@ public class AddPlantActivity extends AppCompatActivity {
                                         plant.setStatus("custom");
                                         plant.setId(setNextId());
                                         plantDb.plantDao().insert(plant);
+                                        setReminder(plant);
 
                                     }
                                 });
-                                setReminder(plant);
 
                                 Toast.makeText(getApplicationContext(),"Plant was added",
                                         Toast.LENGTH_SHORT).show();
@@ -120,20 +120,23 @@ public class AddPlantActivity extends AppCompatActivity {
     void setReminder(Plant plant) {
 //        Date date = new Date();
         Intent intent = new Intent(this,NotificationCreator.class);
-
-        intent.putExtra("plantId", plant.getId());
+        int lastPlantId = plantDb.plantDao().getLastPlantId();
+        intent.putExtra("plantId", lastPlantId);
         intent.putExtra("plantName", plant.getPlantName());
-        intent.putExtra("plantobj", plant);
+        intent.putExtra("eventName", "to plant");
         Log.d("hzz","setReminder0"+plant.getPlantName()+intent.getStringExtra("plantName")+intent.getIntExtra("plantId", -1));
         Log.d("hzzz","plantname: "+plant.getPlantName()+plant.getPlantingDate()+plant.getId());
         PendingIntent pendingIntent;
+        int reqCode = lastPlantId * 100 + 1;
+        Log.d("AddPlantActivity: reqCode = lastPlantId * 100 + 1 = ", String.valueOf(String.valueOf(reqCode)));
+
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
             pendingIntent = PendingIntent.getActivity(getApplicationContext(),
-                    1, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                    reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         }else {
             pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    1, intent, PendingIntent.FLAG_IMMUTABLE);
+                    reqCode, intent, PendingIntent.FLAG_IMMUTABLE);
 
         }
 

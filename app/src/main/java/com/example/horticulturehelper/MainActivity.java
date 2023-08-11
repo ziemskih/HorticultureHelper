@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(Plant plant) {
                 Intent intent = new Intent(MainActivity.this, ViewPlantDetailsActivity.class);
                 int plantId = plant.getId();
+Log.d("iddd", plantId +"    ");
                 intent.putExtra("plantId", plant);
 //                intent.putExtra("plantId", plantId);
                 startActivity(intent);
