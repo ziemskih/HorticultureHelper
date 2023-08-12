@@ -38,17 +38,18 @@ public class NotificationCreator extends BroadcastReceiver {
 
 
         Random r = new Random();
-        int randomNumber = r.nextInt(75 - 18) + 18;
+//        int randomNumber = r.nextInt(175 - 18) + 18;
 //        String plantName = intent.getStringExtra("plantName");
         Plant plant = (Plant) intent.getSerializableExtra("plant");
+        int randomNumber = (int) (Math.random()*10000);
         String eventName = intent.getStringExtra("eventName");
         if (eventName.equals("to plant")) {
 
-            int plantId = intent.getIntExtra("plantId", -1);
-            plant.setId(plantId);
+//            int plantId = intent.getIntExtra("plantId", -1);
+//            plant.setId(plantId);
         }
         String plantName = plant.getPlantName();
-        Log.d("hzser","plantobj: "+ plant.getPlantName()+"     "+"plantId"+plant.getId());
+        Log.d("notif obj","plantobj: "+ plant.getPlantName()+"     "+"plantId"+plant.getId()+"     "+"plantingDate"+plant.getPlantingDate());
 
         Intent updateIntent = new Intent(context, UpdatePlantActivity.class);
         updateIntent.putExtra("plant", plant);
@@ -57,6 +58,7 @@ public class NotificationCreator extends BroadcastReceiver {
         Intent doneIntent = new Intent(context, DoneButtonReceiver.class);
         doneIntent.putExtra("plant", plant);
         doneIntent.putExtra("eventName", eventName);
+
         PendingIntent donePendingIntent = PendingIntent.getBroadcast(context, randomNumber, doneIntent, PendingIntent.FLAG_IMMUTABLE);
 //        mainActivity.setAllPlantReminders(plant);
 
@@ -70,7 +72,8 @@ public class NotificationCreator extends BroadcastReceiver {
 
         NotificationManagerCompat compat = NotificationManagerCompat.from(context);
         compat.notify(randomNumber,builder.build());
-        Log.d("hzz","notificatio id: "+ randomNumber);
+        Log.d("hzz","notificatio id: "+ randomNumber+" randomNo: "+randomNumber);
 
     }
+
 }

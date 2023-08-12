@@ -32,6 +32,7 @@ public class Plant implements Serializable {
     private String protection;
     private String badCompanion;
     private String status;
+    private Boolean isPlanted;
 
     public Plant(String plantName, String status, Date plantingDate) {
         this.plantName = plantName;
@@ -45,6 +46,14 @@ public class Plant implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Boolean getIsPlanted() {
+        return isPlanted;
+    }
+
+    public void setIsPlanted(Boolean planted) {
+        isPlanted = planted;
     }
 
     public String getPlantName() {

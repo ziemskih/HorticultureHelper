@@ -45,7 +45,6 @@ public abstract class PlantDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            Log.d("oncr", "oncerate executed");
             PlantDao plantDao = instance.plantDao();
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             executorService.execute(new Runnable() {
@@ -62,13 +61,9 @@ public abstract class PlantDatabase extends RoomDatabase {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-
                 }
-
             }
-
             );
-
         }
     };
 

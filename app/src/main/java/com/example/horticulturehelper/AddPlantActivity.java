@@ -92,7 +92,8 @@ public class AddPlantActivity extends AppCompatActivity {
                                     public void run() {
 
                                         plant.setStatus("custom");
-                                        plant.setId(setNextId());
+                                        plant.setId(setNextId()+1);
+                                        plant.setIsPlanted(false);
                                         plantDb.plantDao().insert(plant);
                                         setReminder(plant);
 
@@ -121,16 +122,16 @@ public class AddPlantActivity extends AppCompatActivity {
 //        Date date = new Date();
         Intent intent = new Intent(this,NotificationCreator.class);
         int lastPlantId = plantDb.plantDao().getLastPlantId();
-        intent.putExtra("plantId", lastPlantId);
-        intent.putExtra("plantName", plant.getPlantName());
+//        intent.putExtra("plantId", lastPlantId);
+//        intent.putExtra("plantName", plant.getPlantName());
         intent.putExtra("eventName", "to plant");
         intent.putExtra("plant", plant);
 
         Log.d("hzz","setReminder0"+plant.getPlantName()+intent.getStringExtra("plantName")+intent.getIntExtra("plantId", -1));
         Log.d("hzzz","plantname: "+plant.getPlantName()+plant.getPlantingDate()+plant.getId());
         PendingIntent pendingIntent;
-        int reqCode = lastPlantId * 100 + 1;
-        Log.d("AddPlantActivity: reqCode = lastPlantId * 100 + 1 = ", String.valueOf(reqCode));
+        int reqCode = plant.getId() * 100 + 1;
+        Log.d("AddPlantActivity: reqCode = plant.getId() * 100 + 1 = ", String.valueOf(reqCode));
 
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                     reqCode, intent, PendingIntent.FLAG_IMMUTABLE);

@@ -166,6 +166,7 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
             e.printStackTrace();
         }
         plant = new Plant(plantNameStr,plantStatus, dateParsed);
+        plant.setIsPlanted(false);
 
         String plantWateringPeriodInt = editTextWateringPeriod.getText().toString();
         String plantFertilizingPeriodInt = editTextFertilizingPeriod.getText().toString();
@@ -249,7 +250,8 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
         Intent intent = new Intent(getContext(),NotificationCreator.class);
 //        int reqCode = (addPlantActivity.setNextId()+1)*100+1;
         //requestCode setting with plantId*100+1
-        int lastPlantId = plantDb.plantDao().getLastPlantId();
+        int lastPlantId = plantDb.plantDao().getLastPlantId() + 1;
+        plant.setId(lastPlantId);
         intent.putExtra("plantId", lastPlantId);
         intent.putExtra("plantName", editTextPlantName.getText().toString());
         intent.putExtra("eventName", "to plant");

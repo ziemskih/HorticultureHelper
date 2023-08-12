@@ -1,12 +1,13 @@
 package com.example.horticulturehelper;
 
-import static java.security.AccessController.getContext;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,7 @@ import java.util.concurrent.Executors;
 
 public class UpdatePlantActivity extends AppCompatActivity {
     Plant plantOutput = null;
-    Plant plant;
+    Plant plantInput;
     int plantId;
     PlantDatabase plantDb = PlantDatabase.getInstance(getApplication());
     ViewPlantDetailsActivity v = new ViewPlantDetailsActivity();
@@ -54,8 +55,8 @@ public class UpdatePlantActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_plant);
         getSupportActionBar().setTitle("Plant update");
 
-        plant = (Plant) getIntent().getSerializableExtra("plant");
-        plantId = plant.getId();
+        plantInput = (Plant) getIntent().getSerializableExtra("plant");
+        plantId = plantInput.getId();
         editTextPlantName = findViewById(R.id.editTextPlantName);
         textViewSetPlantingDate = findViewById(R.id.textViewPlantingDate);
         textViewWateringDate = findViewById(R.id.textViewWateringDate);
@@ -111,25 +112,25 @@ public class UpdatePlantActivity extends AppCompatActivity {
     }
     void setTextViews() throws ParseException {
         ViewPlantDetailsActivity v = new ViewPlantDetailsActivity();
-        editTextPlantName.setText(plant.getPlantName());
-        textViewSetPlantingDate.setText(v.dateToString(plant.getPlantingDate()));
-        if (plant.getWateringDate() != null)
-            textViewWateringDate.setText(v.dateToString(plant.getWateringDate()));
-        editTextWateringPeriod.setText(String.valueOf(plant.getWateringPeriodInDays()));
-        if (plant.getFertilizingDate() != null)
-            textViewFertilizingDate.setText(v.dateToString(plant.getFertilizingDate()));
-        editTextFertilizingPeriod.setText(String.valueOf(plant.getFertilizingPeriodInDays()));
-        if (plant.getMonitoringDate() != null)
-            textViewMonitoringDate.setText(v.dateToString(plant.getMonitoringDate()));
-        editTextMonitoringPeriod.setText(String.valueOf(plant.getMonitoringPeriodInDays()));
-        if (plant.getHarvestingDate() != null)
-            textViewHarvestingDate.setText(v.dateToString(plant.getHarvestingDate()));
-        editTextVegetationPeriod.setText(String.valueOf(plant.getVegetationPeriodInDays()));
+        editTextPlantName.setText(plantInput.getPlantName());
+        textViewSetPlantingDate.setText(v.dateToString(plantInput.getPlantingDate()));
+        if (plantInput.getWateringDate() != null)
+            textViewWateringDate.setText(v.dateToString(plantInput.getWateringDate()));
+        editTextWateringPeriod.setText(String.valueOf(plantInput.getWateringPeriodInDays()));
+        if (plantInput.getFertilizingDate() != null)
+            textViewFertilizingDate.setText(v.dateToString(plantInput.getFertilizingDate()));
+        editTextFertilizingPeriod.setText(String.valueOf(plantInput.getFertilizingPeriodInDays()));
+        if (plantInput.getMonitoringDate() != null)
+            textViewMonitoringDate.setText(v.dateToString(plantInput.getMonitoringDate()));
+        editTextMonitoringPeriod.setText(String.valueOf(plantInput.getMonitoringPeriodInDays()));
+        if (plantInput.getHarvestingDate() != null)
+            textViewHarvestingDate.setText(v.dateToString(plantInput.getHarvestingDate()));
+        editTextVegetationPeriod.setText(String.valueOf(plantInput.getVegetationPeriodInDays()));
 
-        editTextSpringFertilizer.setText(plant.getSpringFertilizer());
-        editTextSummerFertilizer.setText(plant.getSummerFertilizer());
-        editTextProtection.setText(plant.getProtection());
-        editTextBadCompanion.setText(plant.getBadCompanion());
+        editTextSpringFertilizer.setText(plantInput.getSpringFertilizer());
+        editTextSummerFertilizer.setText(plantInput.getSummerFertilizer());
+        editTextProtection.setText(plantInput.getProtection());
+        editTextBadCompanion.setText(plantInput.getBadCompanion());
 
     }
 
@@ -184,7 +185,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
                 }
                 plantOutput = new Plant(editTextPlantName.getText().toString(), "custom", date);
                 plantOutput.setId(plantId);
-                Log.d("hz","----"+textViewWateringDate.getText());
+                Log.d("hz","----"+textViewWateringDate.getText().toString());
                 if (!textViewWateringDate.getText().toString().isEmpty()) {
 
                 try {
@@ -240,9 +241,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
                 }
             });
             Toast.makeText(getApplicationContext(), "Plant attributes was updated.", Toast.LENGTH_SHORT).show();
-////            if (plantOutput.getPlatingDoneStatus){
-//                //setAlarms
-//            }
+            setAllRemainingReminders(UpdatePlantActivity.this, plantOutput);
         }
         else{
             Toast.makeText(getApplicationContext(), "Plant attributes was not updated. Plant name can't be empty.", Toast.LENGTH_LONG).show();
@@ -291,6 +290,69 @@ public class UpdatePlantActivity extends AppCompatActivity {
         datePickerDialog.show();
         Log.d("hz", "date:"+textView.getText()+"end");
 
+    }
+    void setAllRemainingReminders(Context context1, Plant plant) {
+
+        Intent intent1 = new Intent(context1, NotificationCreator.class);
+        intent1.putExtra("plant", plant);
+        long millis ;
+        int reqCode = 0;
+        if (plantInput.getIsPlanted() == true) {
+            for (int i = 2; i < 6; i++) {
+                switch (i) {
+                    case 2:
+                        intent1.putExtra("eventName", "to water");
+                        reqCode = plant.getId() * 100 + i;
+                        millis = plant.getPlantingDate().getTime() + 60000L * plant.getWateringPeriodInDays();
+                        setAlarm(context1, intent1, reqCode, millis);
+Log.d("update obj: ", "watering millis:    " + millis);
+
+                        break;
+                    case 3:
+                        intent1.putExtra("eventName", "to fertilize");
+                        reqCode = plant.getId() * 100 + i;
+                        millis = plant.getPlantingDate().getTime() + 60000L * plant.getFertilizingPeriodInDays();
+                        setAlarm(context1, intent1, reqCode, millis);
+                        Log.d("update obj: ", "fertilizing millis:    " + millis);
+                        break;
+                    case 4:
+                        intent1.putExtra("eventName", "to monitor");
+                        reqCode = plant.getId() * 100 + i;
+                        millis = plant.getPlantingDate().getTime() + 60000L * plant.getMonitoringPeriodInDays();
+                        setAlarm(context1, intent1, reqCode, millis);
+                        Log.d("update obj: ", "monitoring millis:    " + millis);
+                        break;
+                    case 5:
+                        intent1.putExtra("eventName", "to harvest");
+                        reqCode = plant.getId() * 100 + i;
+                        millis = plant.getPlantingDate().getTime() + 60000L * plant.getVegetationPeriodInDays();
+                        setAlarm(context1, intent1, reqCode, millis);
+                        Log.d("update obj: ", "vegetation millis:    " + millis);
+                        break;
+
+                }
+            }
+        } else {
+            intent1.putExtra("eventName", "to plant");
+            intent1.putExtra("plant", plant);
+            reqCode = plant.getId() * 100 + 1;
+            millis = plant.getPlantingDate().getTime();
+            setAlarm(context1, intent1, reqCode, millis);
+
+        }
+    }
+    void setAlarm(Context context1, Intent intent, int reqCode, long millis) {
+        PendingIntent pendingIntent;
+
+        pendingIntent = PendingIntent.getBroadcast(context1,
+                reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+
+
+        AlarmManager alarmManager = (AlarmManager) context1.getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+        Log.d("update obj: ", plantInput.getPlantName() + "    " + millis);
     }
 
 

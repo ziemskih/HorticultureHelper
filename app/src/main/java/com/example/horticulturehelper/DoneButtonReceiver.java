@@ -36,6 +36,8 @@ public class DoneButtonReceiver extends BroadcastReceiver {
 //
 //        if (eventName.equals("to plant")) {
             setAllRemainingReminders();
+            setEventsDatesInDb();
+
 //            updatePlantEventDates();
 //        } else
 //            updatePlantCurrentEventDate();
@@ -46,6 +48,20 @@ public class DoneButtonReceiver extends BroadcastReceiver {
 //
 //    private void updatePlantEventDates() {
 //
+    }
+
+    private void setEventsDatesInDb() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                plant.setIsPlanted(true);
+                plantDatabase.plantDao().update(plant);
+
+            }
+        });
+
     }
 
     void setAllRemainingReminders() {
@@ -81,8 +97,6 @@ public class DoneButtonReceiver extends BroadcastReceiver {
                     setAlarm(intent1, reqCode, millis);
                     break;
 
-                default:
-                // code block
             }
     }
 
