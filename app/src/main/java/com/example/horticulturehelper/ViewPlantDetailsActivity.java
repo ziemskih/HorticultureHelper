@@ -31,6 +31,8 @@ public class ViewPlantDetailsActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.textViewViewPlantDetails);
         plant = (Plant) getIntent().getSerializableExtra("plantId");
+Log.d("isPlanted in ViewPlantDetailsActivity", "isPlanted" +plant.getIsPlanted()+"    ");
+
 
         displayPlantDetails();
 
@@ -131,6 +133,7 @@ public class ViewPlantDetailsActivity extends AppCompatActivity {
             case R.id.view_plant_activity_menu:
                 Intent intent = new Intent(ViewPlantDetailsActivity.this,UpdatePlantActivity.class);
                 intent.putExtra("plant", plant);
+                intent.setAction("comesFromViewPlantDetailsActivity");
                 startActivity(intent);
                 return true;
             default:

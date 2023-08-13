@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 int plantId = plant.getId();
 Log.d("iddd", plantId +"    ");
                 intent.putExtra("plantId", plant);
+Log.d("isPlanted", "isPlanted" +plant.getIsPlanted()+"    ");
 //                intent.putExtra("plantId", plantId);
                 startActivity(intent);
             }

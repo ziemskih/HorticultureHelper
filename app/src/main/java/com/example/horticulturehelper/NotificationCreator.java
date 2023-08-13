@@ -33,10 +33,6 @@ public class NotificationCreator extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
         }
 
-//        Intent contentIntent = new Intent(context, AddPlantActivity.class);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_IMMUTABLE);
-
-
         Random r = new Random();
 //        int randomNumber = r.nextInt(175 - 18) + 18;
 //        String plantName = intent.getStringExtra("plantName");
@@ -53,13 +49,13 @@ public class NotificationCreator extends BroadcastReceiver {
 
         Intent updateIntent = new Intent(context, UpdatePlantActivity.class);
         updateIntent.putExtra("plant", plant);
-        PendingIntent updatePendingIntent = PendingIntent.getActivity(context, randomNumber, updateIntent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent updatePendingIntent = PendingIntent.getActivity(context, randomNumber, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Intent doneIntent = new Intent(context, DoneButtonReceiver.class);
         doneIntent.putExtra("plant", plant);
         doneIntent.putExtra("eventName", eventName);
 
-        PendingIntent donePendingIntent = PendingIntent.getBroadcast(context, randomNumber, doneIntent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent donePendingIntent = PendingIntent.getBroadcast(context, randomNumber, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 //        mainActivity.setAllPlantReminders(plant);
 
 

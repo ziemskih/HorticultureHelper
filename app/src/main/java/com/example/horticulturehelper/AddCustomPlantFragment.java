@@ -263,7 +263,7 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
         PendingIntent pendingIntent;
 
             pendingIntent = PendingIntent.getBroadcast(getContext(),
-                    reqCode, intent, PendingIntent.FLAG_IMMUTABLE);
+                    reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Log.d("hzz","setReminder1 textViewSetPlantingDate: "+textViewSetPlantingDate.getText().toString());
 

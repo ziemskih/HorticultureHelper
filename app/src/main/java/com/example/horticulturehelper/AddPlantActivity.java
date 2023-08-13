@@ -134,7 +134,7 @@ public class AddPlantActivity extends AppCompatActivity {
         Log.d("AddPlantActivity: reqCode = plant.getId() * 100 + 1 = ", String.valueOf(reqCode));
 
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    reqCode, intent, PendingIntent.FLAG_IMMUTABLE);
+                    reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 
         Log.d("hzz","setReminder1");
