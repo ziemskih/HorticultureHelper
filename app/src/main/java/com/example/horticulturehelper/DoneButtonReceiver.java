@@ -10,33 +10,88 @@ import android.util.Log;
 
 import androidx.room.Update;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
 public class DoneButtonReceiver extends BroadcastReceiver {
-    Plant plant;
+    static Plant plant;
     String eventName;
     PlantDatabase plantDatabase;
     Context context1;
     String str;
+    long millis;
+    int eventNumber;
     UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
+    PlantRepository plantRepository;
+//    PlantDatabase plantDb = PlantDatabase.getInstance(get);
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
         context1 = context;
         plant = (Plant) intent.getSerializableExtra("plant");
         eventName = intent.getStringExtra("eventName");
         plantDatabase = PlantDatabase.getInstance(context);
+        plantRepository = new PlantRepository(updatePlantActivity.getApplication());
 
-//        if (eventName.equals("to plant")) {
-        plant.setIsPlanted(true);
-        updatePlantActivity.setAllRemainingReminders(plant, context1, "doneBtnRec");
-        updatePlantActivity.updateDbEntity(plant, context1);
+        switch (eventName) {
+            case "to plant":
+                plant.setIsPlanted(true);
+                updatePlantActivity.setAllRemainingReminders(plant, context1, "doneBtnRec");
+                updatePlantActivity.updateDbEntity(plant, context1);
+                break;
+            case "to water":
+                plant = plantRepository.getPlantById(plant.getId());
+                //getting plant object from DB by ID, because it needs updated attributes
+                Log.d("tagitagi", "from done plant ID:   "+plant.getId()+ plantRepository.getPlantById(plant.getId()).getPlantName()+plant.getId());
+                Log.d("donebut","donbut class, plantFroDb.getPlantName(): " + plant.getPlantName()+ plant.getHarvestingDate());
 
-
+                millis = System.currentTimeMillis() + 60000 * plant.getWateringPeriodInDays();
+                plant.setWateringDate(new Date(millis));
+                eventNumber = 2;
+                updatePlantActivity.updateDbEntity(plant, context1);
+                setSingleReminder();
+                break;
+            case "to fertilize":
+                plant = plantRepository.getPlantById(plant.getId());
+                millis = System.currentTimeMillis() + 60000 * plant.getFertilizingPeriodInDays();
+                plant.setFertilizingDate(new Date(millis));
+                eventNumber = 3;
+                updatePlantActivity.updateDbEntity(plant, context1);
+                setSingleReminder();
+                break;
+            case "to monitor":
+                plant = plantRepository.getPlantById(plant.getId());
+                millis = System.currentTimeMillis() + 60000 * plant.getMonitoringPeriodInDays();
+                plant.setMonitoringDate(new Date(millis));
+                eventNumber = 4;
+                updatePlantActivity.updateDbEntity(plant, context1);
+                setSingleReminder();
+                break;
+            case "to harvest":
+                plant = plantRepository.getPlantById(plant.getId());
+                millis = System.currentTimeMillis() + 60000 * plant.getVegetationPeriodInDays();
+                plant.setHarvestingDate(new Date(millis));
+                eventNumber = 5;
+                updatePlantActivity.updateDbEntity(plant, context1);
+                setSingleReminder();
+                break;
         }
-        private void updatePlantWithRemindersDate(){
+
+    }
+        private void setSingleReminder(){
+            Intent intent1 = new Intent(context1, NotificationCreator.class);
+            intent1.putExtra("plant", plant);
+            intent1.putExtra("eventName", eventName);
+            int reqCode = plant.getId() * 100 + eventNumber;
+            updatePlantActivity.setAlarm(context1, intent1, reqCode, millis);
+
+
+
 
         }
 

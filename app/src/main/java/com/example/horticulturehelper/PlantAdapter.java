@@ -1,5 +1,8 @@
 package com.example.horticulturehelper;
 
+import static java.sql.Types.NULL;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +37,43 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
 
         Plant currentPlant = plants.get(position);
         holder.textViewPlantName.setText(currentPlant.getPlantName());
+        if (currentPlant.getIsPlanted()){
+            holder.textViewUpcoming.setText(getSmallestDate(currentPlant));
+        }
+        else
         holder.textViewUpcoming.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(currentPlant.getPlantingDate()));
 
+    }
+
+    private String getSmallestDate(Plant plant) {
+        Log.d("PlantAdap", "plantname and id:  "+plant.getPlantName() + plant.getId());
+
+        long wateringDateInMillis = 0;
+        long fertilizingDateInMillis = 0;
+        long monitoringDateInMillis = 0;
+        long harvestingDateInMillis = 0;
+        long largeNumber = 4611686018427L;
+
+        if (plant.getWateringDate() != null)
+            wateringDateInMillis = plant.getWateringDate().getTime();
+        else wateringDateInMillis = largeNumber;
+
+        if (plant.getFertilizingDate() != null)
+            fertilizingDateInMillis = plant.getFertilizingDate().getTime();
+        else fertilizingDateInMillis = largeNumber;
+
+        if (plant.getMonitoringDate() != null)
+            monitoringDateInMillis = plant.getMonitoringDate().getTime();
+        else monitoringDateInMillis = largeNumber;
+
+        if (plant.getHarvestingDate() != null)
+            harvestingDateInMillis = plant.getHarvestingDate().getTime();
+        else harvestingDateInMillis = largeNumber;
+
+        long smallestDate = Math.min(wateringDateInMillis,Math.min(monitoringDateInMillis,Math.min(fertilizingDateInMillis,harvestingDateInMillis)));
+
+
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(smallestDate);
     }
 
     @Override

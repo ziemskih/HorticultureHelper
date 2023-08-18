@@ -52,7 +52,6 @@ public class AddCustomPlantFragment extends Fragment {
     PlantDatabase plantDb = PlantDatabase.getInstance(getContext());
     AddPlantActivity addPlantActivity = new AddPlantActivity();
     Plant plant = null;
-    String reminderTime = " 12:00";
     UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
 
 
@@ -78,7 +77,8 @@ public class AddCustomPlantFragment extends Fragment {
         textViewSetPlantingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setPlantingDate(textViewSetPlantingDate);
+
+                updatePlantActivity.setDate(textViewSetPlantingDate, getContext());
             }
 
         });
@@ -136,6 +136,10 @@ public class AddCustomPlantFragment extends Fragment {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
+                    plant.setStatus("custom");
+                    plant.setId(plantDb.plantDao().getLastPlantId() + 1);
+                    plant.setIsPlanted(false);
+
                     plantDb.plantDao().insert(plant);
                     try {
                         setPlantingDateReminder();
@@ -154,10 +158,10 @@ public class AddCustomPlantFragment extends Fragment {
 
 //        finish();
     }
-    public Plant createPlantObject(){
+    public void createPlantObject(){
         String plantNameStr = editTextPlantName.getText().toString();
         String plantStatus = "custom";
-        String plantingDateStr = (textViewSetPlantingDate.getText().toString()).concat(reminderTime);
+        String plantingDateStr = (textViewSetPlantingDate.getText().toString());
 Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toString());
         Date dateParsed = null;
         try {
@@ -194,72 +198,27 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
         if (!plantBadCompanionStr.isEmpty())
             plant.setBadCompanion(plantBadCompanionStr);
 
-        return plant;
+//        return plant;
     }
 
 
-//    public Date stringToDate (String dateToparse) throws ParseException {
-//
-//        Date dateParsed = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(dateToparse);
-//
-//        return dateParsed;
-//
-//    }
 
-
-
-    public void setPlantingDate(TextView textView){
-        final Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR);
-        int mMonth = c.get(Calendar.MONTH);
-        int mDay = c.get(Calendar.DAY_OF_MONTH);
-        int mHour = c.get(Calendar.HOUR_OF_DAY);
-        int mMinute = c.get(Calendar.MINUTE);
-//        int mHour = Integer.parseInt((textView.getText().toString()).substring(11,13));
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
-                new DatePickerDialog.OnDateSetListener() {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-//                        final Calendar newDate = Calendar.getInstance();
-
-//                        date = date.concat(" 12:00");
-                        TimePickerDialog time = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                String date = String.format("%d-%02d-%02d %02d:%02d", year,monthOfYear+1,dayOfMonth,hourOfDay,minute);
-                                textView.setText(date);
-
-//                                newDate.set(year, monthOfYear, dayOfMonth, hourOfDay, minute, 0);
-                            }
-                        }, mHour, mMinute, true);
-                        time.show();
-
-                    }
-                }, mYear, mMonth, mDay);
-
-        datePickerDialog.show();
-
-    }
     void setPlantingDateReminder() throws ParseException {
         Log.d("hzz","setPlantingDateReminder started: ");
 //        Date date = new Date();
         Intent intent = new Intent(getContext(),NotificationCreator.class);
 //        int reqCode = (addPlantActivity.setNextId()+1)*100+1;
         //requestCode setting with plantId*100+1
-        int lastPlantId = plantDb.plantDao().getLastPlantId() + 1;
-        plant.setId(lastPlantId);
-        intent.putExtra("plantId", lastPlantId);
-        intent.putExtra("plantName", editTextPlantName.getText().toString());
+//        int lastPlantId = plantDb.plantDao().getLastPlantId() + 1;
+//        plant.setId(lastPlantId);
+//        intent.putExtra("plantId", lastPlantId);
+//        intent.putExtra("plantName", editTextPlantName.getText().toString());
         intent.putExtra("eventName", "to plant");
         intent.putExtra("plant", plant);
 
         Log.d("hzz","setReminder0 fra from intent: "+ intent.getStringExtra("plantName"));
-        int reqCode = lastPlantId * 100 + 1;
-        Log.d("AddCustomPlantFragment: reqCode = lastPlantId * 100 + 1 = ", String.valueOf(reqCode));
+        int reqCode = plant.getId() * 100 + 1;
+        Log.d("AddCustomPlantFragment: reqCode = plant.getId() * 100 + 1 = ", String.valueOf(reqCode));
         PendingIntent pendingIntent;
 
             pendingIntent = PendingIntent.getBroadcast(getContext(),
@@ -267,7 +226,7 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
 
         Log.d("hzz","setReminder1 textViewSetPlantingDate: "+textViewSetPlantingDate.getText().toString());
 
-        long millis = PlantDatabase.stringToDate((textViewSetPlantingDate.getText().toString()).concat(reminderTime)).getTime();
+        long millis = plant.getPlantingDate().getTime();
         Log.d("hzz","setReminder1.1");
         AlarmManager alarmManager = (AlarmManager) requireActivity().getApplication().getSystemService(Context.ALARM_SERVICE);
         Log.d("hzz","setReminder2");
@@ -276,6 +235,42 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
         Log.d("hzz","setReminder3 "  +millis+ new Date(millis));
     }
 
+//    public void setPlantingDate(TextView textView){
+//        final Calendar c = Calendar.getInstance();
+//        int mYear = c.get(Calendar.YEAR);
+//        int mMonth = c.get(Calendar.MONTH);
+//        int mDay = c.get(Calendar.DAY_OF_MONTH);
+//        int mHour = c.get(Calendar.HOUR_OF_DAY);
+//        int mMinute = c.get(Calendar.MINUTE);
+////        int mHour = Integer.parseInt((textView.getText().toString()).substring(11,13));
+//
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+//                new DatePickerDialog.OnDateSetListener() {
+//
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year,
+//                                          int monthOfYear, int dayOfMonth) {
+////                        final Calendar newDate = Calendar.getInstance();
+//
+////                        date = date.concat(" 12:00");
+//                        TimePickerDialog time = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+//
+//                            @Override
+//                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                                String date = String.format("%d-%02d-%02d %02d:%02d", year,monthOfYear+1,dayOfMonth,hourOfDay,minute);
+//                                textView.setText(date);
+//
+////                                newDate.set(year, monthOfYear, dayOfMonth, hourOfDay, minute, 0);
+//                            }
+//                        }, mHour, mMinute, true);
+//                        time.show();
+//
+//                    }
+//                }, mYear, mMonth, mDay);
+//
+//        datePickerDialog.show();
+//
+//    }
 
 
 }

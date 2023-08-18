@@ -148,7 +148,7 @@ public class AddPlantActivity extends AppCompatActivity {
     }
 
     public int setNextId(){
-        int nextId = plantDb.plantDao().getLastPlantId() + 1;
+        int nextId = plantDb.plantDao().getLastPlantId();
         return nextId;
     }
 

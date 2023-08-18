@@ -33,6 +33,8 @@ public class UpdatePlantActivity extends AppCompatActivity {
     PlantDatabase plantDb = PlantDatabase.getInstance(getApplication());
     ViewPlantDetailsActivity v = new ViewPlantDetailsActivity();
     Context mContext;
+    Plant plantFromDb;
+
 
     EditText editTextPlantName;
     TextView textViewSetPlantingDate;
@@ -82,31 +84,32 @@ public class UpdatePlantActivity extends AppCompatActivity {
         textViewSetPlantingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setDate(textViewSetPlantingDate);
+                if (plantInput.getIsPlanted() == false)
+                setDate(textViewSetPlantingDate, UpdatePlantActivity.this);
             }
         });
         textViewWateringDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setDate(textViewWateringDate);
+                setDate(textViewWateringDate, UpdatePlantActivity.this);
             }
         });
         textViewFertilizingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setDate(textViewFertilizingDate);
+                setDate(textViewFertilizingDate, UpdatePlantActivity.this);
             }
         });
         textViewMonitoringDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setDate(textViewMonitoringDate);
+                setDate(textViewMonitoringDate, UpdatePlantActivity.this);
             }
         });
         textViewHarvestingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setDate(textViewHarvestingDate);
+                setDate(textViewHarvestingDate, UpdatePlantActivity.this);
             }
         });
 
@@ -185,60 +188,78 @@ public class UpdatePlantActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                plantOutput = new Plant(editTextPlantName.getText().toString(), "custom", date);
-                plantOutput.setIsPlanted(plantInput.getIsPlanted());
-                plantOutput.setId(plantId);
+                plantOutput = plantInput;
+//                plantOutput = new Plant(editTextPlantName.getText().toString(), "custom", date);
+//                plantOutput.setIsPlanted(plantInput.getIsPlanted());
+//                plantOutput.setId(plantId);
                 Log.d("hz","----"+textViewWateringDate.getText().toString());
-            plantOutput.setWateringPeriodInDays(Integer.valueOf(editTextWateringPeriod.getText().toString()));
-            if (!textViewFertilizingDate.getText().toString().isEmpty()) {
-                try {
-                    plantOutput.setFertilizingDate(plantDb.stringToDate(textViewFertilizingDate.getText().toString()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                if (!editTextPlantName.getText().toString().isEmpty()) {
+                    plantOutput.setPlantName(editTextPlantName.getText().toString());
                 }
-            }
-            plantOutput.setFertilizingPeriodInDays(Integer.valueOf(editTextFertilizingPeriod.getText().toString()));
-            if (!textViewMonitoringDate.getText().toString().isEmpty()) {
-                try {
-                    plantOutput.setMonitoringDate(plantDb.stringToDate(textViewMonitoringDate.getText().toString()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+
+                if (!textViewSetPlantingDate.getText().toString().isEmpty()) {
+                    try {
+                        plantOutput.setPlantingDate(plantDb.stringToDate(textViewSetPlantingDate.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            plantOutput.setMonitoringPeriodInDays(Integer.valueOf(editTextMonitoringPeriod.getText().toString()));
-            if (!textViewHarvestingDate.getText().toString().isEmpty()) {
-                try {
-                    plantOutput.setHarvestingDate(plantDb.stringToDate(textViewHarvestingDate.getText().toString()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+
+                if (!textViewWateringDate.getText().toString().isEmpty()) {
+                    try {
+                        plantOutput.setWateringDate(plantDb.stringToDate(textViewWateringDate.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            plantOutput.setVegetationPeriodInDays(Integer.valueOf(editTextVegetationPeriod.getText().toString()));
+                plantOutput.setWateringPeriodInDays(Integer.valueOf(editTextWateringPeriod.getText().toString()));
 
-            plantOutput.setSpringFertilizer(editTextSpringFertilizer.getText().toString());
-            plantOutput.setSummerFertilizer(editTextSummerFertilizer.getText().toString());
-            plantOutput.setProtection(editTextProtection.getText().toString());
-            plantOutput.setBadCompanion(editTextBadCompanion.getText().toString());
-//        if (getIntent().getAction(comesFromViewPlantDetailsActivity)){
-//
-//            }
+                if (!textViewFertilizingDate.getText().toString().isEmpty()) {
+                    try {
+                        plantOutput.setFertilizingDate(plantDb.stringToDate(textViewFertilizingDate.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                plantOutput.setFertilizingPeriodInDays(Integer.valueOf(editTextFertilizingPeriod.getText().toString()));
 
+                if (!textViewMonitoringDate.getText().toString().isEmpty()) {
+                    try {
+                        plantOutput.setMonitoringDate(plantDb.stringToDate(textViewMonitoringDate.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                plantOutput.setMonitoringPeriodInDays(Integer.valueOf(editTextMonitoringPeriod.getText().toString()));
 
-            Log.d("qwerty", "plantObjct  "+editTextPlantName.getText().toString()+plantOutput.getPlantName());
+                if (!textViewHarvestingDate.getText().toString().isEmpty()) {
+                    try {
+                        plantOutput.setHarvestingDate(plantDb.stringToDate(textViewHarvestingDate.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                plantOutput.setVegetationPeriodInDays(Integer.valueOf(editTextVegetationPeriod.getText().toString()));
+                plantOutput.setSpringFertilizer(editTextSpringFertilizer.getText().toString());
+                plantOutput.setSummerFertilizer(editTextSummerFertilizer.getText().toString());
+                plantOutput.setProtection(editTextProtection.getText().toString());
+                plantOutput.setBadCompanion(editTextBadCompanion.getText().toString());
 
-            if (!plantOutput.getPlantName().equals("")) {
+                Log.d("qwerty", "plantObjct  "+editTextPlantName.getText().toString()+plantOutput.getPlantName());
 
-                updateDbEntity(plantOutput, mContext);
-                setAllRemainingReminders(plantOutput, UpdatePlantActivity.this, "updatePlAct");
-            }
-            else{
-                Toast.makeText(getApplicationContext(), "Plant attributes was not updated. Plant name can't be empty.", Toast.LENGTH_LONG).show();
-            }
-            Intent intent = new Intent(UpdatePlantActivity.this,MainActivity.class);
-            startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                if (!plantOutput.getPlantName().equals("")) {
+
+                    setAllRemainingReminders(plantOutput, UpdatePlantActivity.this, "updatePlAct");
+                    updateDbEntity(plantOutput, mContext);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Plant attributes was not updated. Plant name can't be empty.", Toast.LENGTH_LONG).show();
+                }
+                Intent intent = new Intent(UpdatePlantActivity.this,MainActivity.class);
+                startActivity(intent);
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
         }
     }
 
@@ -256,7 +277,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
     }
 
-    public void setDate(TextView textView){
+    public void setDate(TextView textView, Context context1){
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
@@ -266,7 +287,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
         int mMinute = c.get(Calendar.MINUTE);
 //        int mHour = Integer.parseInt((textView.getText().toString()).substring(11,13));
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context1,
                 new DatePickerDialog.OnDateSetListener() {
 
                     @Override
@@ -275,7 +296,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
 //                        final Calendar newDate = Calendar.getInstance();
 
 //                        date = date.concat(" 12:00");
-                        TimePickerDialog time = new TimePickerDialog(UpdatePlantActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                        TimePickerDialog time = new TimePickerDialog(context1, new TimePickerDialog.OnTimeSetListener() {
 
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -298,7 +319,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
         Intent intent1 = new Intent(context1, NotificationCreator.class);
         intent1.putExtra("plant", plant);
-        long millis ;
+        long millis;
         int reqCode = 0;
         if (plant.getIsPlanted() == true) {
             for (int i = 2; i < 6; i++) {
@@ -307,10 +328,13 @@ public class UpdatePlantActivity extends AppCompatActivity {
                         intent1.putExtra("eventName", "to water");
                         reqCode = plant.getId() * 100 + i;
                         millis = plant.getPlantingDate().getTime() + 30000L * plant.getWateringPeriodInDays();
-                        setAlarm(context1, intent1, reqCode, millis);
                         if (callerClass.equals("doneBtnRec")){
                             plant.setWateringDate(new Date(millis));
                         }
+                        if (callerClass.equals("updatePlAct")){
+                            millis = plant.getWateringDate().getTime();
+                        }
+                        setAlarm(context1, intent1, reqCode, millis);
 Log.d("update obj: ", "watering millis:    " + millis);
 
                         break;
@@ -318,10 +342,13 @@ Log.d("update obj: ", "watering millis:    " + millis);
                         intent1.putExtra("eventName", "to fertilize");
                         reqCode = plant.getId() * 100 + i;
                         millis = plant.getPlantingDate().getTime() +30000L * plant.getFertilizingPeriodInDays();
-                        setAlarm(context1, intent1, reqCode, millis);
                         if (callerClass.equals("doneBtnRec")){
                             plant.setFertilizingDate(new Date(millis));
                         }
+                        if (callerClass.equals("updatePlAct")){
+                            millis = plant.getFertilizingDate().getTime();
+                        }
+                        setAlarm(context1, intent1, reqCode, millis);
 
                         Log.d("update obj: ", "fertilizing millis:    " + millis);
                         break;
@@ -329,10 +356,13 @@ Log.d("update obj: ", "watering millis:    " + millis);
                         intent1.putExtra("eventName", "to monitor");
                         reqCode = plant.getId() * 100 + i;
                         millis = plant.getPlantingDate().getTime() + 30000L * plant.getMonitoringPeriodInDays();
-                        setAlarm(context1, intent1, reqCode, millis);
                         if (callerClass.equals("doneBtnRec")){
                             plant.setMonitoringDate(new Date(millis));
                         }
+                        if (callerClass.equals("updatePlAct")){
+                            millis = plant.getMonitoringDate().getTime();
+                        }
+                        setAlarm(context1, intent1, reqCode, millis);
 
                         Log.d("update obj: ", "monitoring millis:    " + millis);
                         break;
@@ -340,11 +370,14 @@ Log.d("update obj: ", "watering millis:    " + millis);
                         intent1.putExtra("eventName", "to harvest");
                         reqCode = plant.getId() * 100 + i;
                         millis = plant.getPlantingDate().getTime() + 30000L * plant.getVegetationPeriodInDays();
-                        setAlarm(context1, intent1, reqCode, millis);
                         if (callerClass.equals("doneBtnRec")){
                             plant.setHarvestingDate(new Date(millis));
                             updateDbEntity(plant, context1);
                         }
+                        if (callerClass.equals("updatePlAct")){
+                            millis = plant.getHarvestingDate().getTime();
+                        }
+                        setAlarm(context1, intent1, reqCode, millis);
 
                         Log.d("update obj: ", "vegetation millis:    " + millis);
                         break;
@@ -372,6 +405,20 @@ Log.d("update obj: ", "watering millis:    " + millis);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
 //        Log.d("update obj: ", plantInput.getPlantName() + "    " + millis);
     }
+
+//    public Plant getPlantFromDb(int plantId){
+//        UpdatePlantActivity.this.runOnUiThread(new Runnable() {
+//            public void run() {
+//                Log.d("UI thread", "I am the UI thread");
+//                plantFromDb = plantDb.plantDao().getPlantById(plantId);
+//                Log.d("tagtag","upd class, plantFroDb.getPlantName(): " + plantFromDb.getPlantName()+ plantFromDb.getHarvestingDate());
+//
+//            }
+//        });
+//        Log.d("tagtag","out of thread , upd class, plantFroDb.getPlantName(): " + plantFromDb.getPlantName()+ plantFromDb.getHarvestingDate());
+//
+//    return plantFromDb;
+//    }
 
 
 }

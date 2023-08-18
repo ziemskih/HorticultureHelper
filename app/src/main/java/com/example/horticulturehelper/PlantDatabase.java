@@ -32,6 +32,7 @@ public abstract class PlantDatabase extends RoomDatabase {
                             ,PlantDatabase.class, "plant_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallBack)
+                    .allowMainThreadQueries()
                     .build();
             Log.d("oncr", "build executed");
 
