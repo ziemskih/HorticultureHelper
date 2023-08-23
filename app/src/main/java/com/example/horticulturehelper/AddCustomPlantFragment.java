@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,9 +49,9 @@ public class AddCustomPlantFragment extends Fragment {
     EditText editTextProtection;
     EditText editTextBadCompanion;
 
+    private PlantViewModel plantViewModel;
+
     Button buttonCancel, buttonSave;
-    PlantDatabase plantDb = PlantDatabase.getInstance(getContext());
-    AddPlantActivity addPlantActivity = new AddPlantActivity();
     Plant plant = null;
     UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
 
@@ -59,6 +60,7 @@ public class AddCustomPlantFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_add_custom_plant, container, false);
+        plantViewModel = new ViewModelProvider(getActivity()).get(PlantViewModel.class);
 
         editTextPlantName = view.findViewById(R.id.editTextPlantName);
         textViewSetPlantingDate = view.findViewById(R.id.textViewSetPlantingDate);
@@ -137,10 +139,11 @@ public class AddCustomPlantFragment extends Fragment {
                 @Override
                 public void run() {
                     plant.setStatus("custom");
-                    plant.setId(plantDb.plantDao().getLastPlantId() + 1);
+                    plant.setId(plantViewModel.getLastPlantId() + 1);
                     plant.setIsPlanted(false);
 
-                    plantDb.plantDao().insert(plant);
+//                    plantDb.plantDao().insert(plant);
+                    plantViewModel.insert(plant);
                     try {
                         setPlantingDateReminder();
                     } catch (ParseException e) {

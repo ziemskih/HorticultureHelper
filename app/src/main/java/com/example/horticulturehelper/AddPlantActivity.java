@@ -38,8 +38,6 @@ import java.util.concurrent.Executors;
 public class AddPlantActivity extends AppCompatActivity {
 
     private PlantViewModel plantViewModel;
-    PlantDatabase plantDb = PlantDatabase.getInstance(getApplication());
-    PlantDao plantDao;
 
 
 
@@ -95,7 +93,6 @@ public class AddPlantActivity extends AppCompatActivity {
                                         plant.setId(setNextId()+1);
                                         plant.setIsPlanted(false);
                                         plantViewModel.insert(plant);
-//                                        plantDb.plantDao().insert(plant);
                                         setReminder(plant);
 
                                     }
@@ -120,11 +117,7 @@ public class AddPlantActivity extends AppCompatActivity {
 
     }
     void setReminder(Plant plant) {
-//        Date date = new Date();
         Intent intent = new Intent(this,NotificationCreator.class);
-        int lastPlantId = plantDb.plantDao().getLastPlantId();
-//        intent.putExtra("plantId", lastPlantId);
-//        intent.putExtra("plantName", plant.getPlantName());
         intent.putExtra("eventName", "to plant");
         intent.putExtra("plant", plant);
 
@@ -149,7 +142,6 @@ public class AddPlantActivity extends AppCompatActivity {
     }
 
     public int setNextId(){
-//        int nextId = plantDb.plantDao().getLastPlantId();
         int nextId = plantViewModel.getLastPlantId();
 
         return nextId;

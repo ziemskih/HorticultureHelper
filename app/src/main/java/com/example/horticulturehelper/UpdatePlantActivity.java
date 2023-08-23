@@ -21,6 +21,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -30,10 +31,8 @@ public class UpdatePlantActivity extends AppCompatActivity {
     Plant plantOutput = null;
     Plant plantInput;
     int plantId;
-    PlantDatabase plantDb = PlantDatabase.getInstance(getApplication());
-    ViewPlantDetailsActivity v = new ViewPlantDetailsActivity();
-    Context mContext;
-    Plant plantFromDb;
+    private static PlantRepository plantRepository;
+    Context appContext;
 
 
     EditText editTextPlantName;
@@ -57,10 +56,12 @@ public class UpdatePlantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_plant);
         getSupportActionBar().setTitle("Plant update");
-        mContext = getApplication();
-
+        appContext = getApplication();
+        plantRepository = new PlantRepository(getApplication());
         plantInput = (Plant) getIntent().getSerializableExtra("plant");
         plantId = plantInput.getId();
+        plantInput = plantRepository.getPlantById(plantId);
+
         editTextPlantName = findViewById(R.id.editTextPlantName);
         textViewSetPlantingDate = findViewById(R.id.textViewPlantingDate);
         textViewWateringDate = findViewById(R.id.textViewWateringDate);
@@ -139,36 +140,6 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
     }
 
-//    Plant setPlantAttributes() throws ParseException {
-//        Plant plantOutput = null;
-//        plantOutput.setPlantName(editTextPlantName.getText().toString());
-//        Log.d("qwerty", "plantObjct  "+editTextPlantName.getText().toString());
-//
-//
-//        plantOutput.setPlantingDate(plantDb.stringToDate(textViewSetPlantingDate.getText().toString()));
-//        if (!textViewWateringDate.getText().toString().isEmpty())
-//            plantOutput.setWateringDate(plantDb.stringToDate(textViewWateringDate.getText().toString()));
-//        plantOutput.setWateringPeriodInDays(Integer.valueOf(editTextWateringPeriod.getText().toString()));
-//        if (!textViewFertilizingDate.getText().toString().isEmpty())
-//            plantOutput.setFertilizingDate(plantDb.stringToDate(textViewFertilizingDate.getText().toString()));
-//        plantOutput.setFertilizingPeriodInDays(Integer.valueOf(editTextFertilizingPeriod.getText().toString()));
-//        if (!textViewMonitoringDate.getText().toString().isEmpty())
-//            plantOutput.setMonitoringDate(plantDb.stringToDate(textViewMonitoringDate.getText().toString()));
-//        plantOutput.setMonitoringPeriodInDays(Integer.valueOf(editTextFertilizingPeriod.getText().toString()));
-//        if (!textViewHarvestingDate.getText().toString().isEmpty())
-//            plantOutput.setHarvestingDate(plantDb.stringToDate(textViewHarvestingDate.getText().toString()));
-//        plantOutput.setVegetationPeriodInDays(Integer.valueOf(editTextVegetationPeriod.getText().toString()));
-//
-//        plantOutput.setSpringFertilizer(editTextSpringFertilizer.getText().toString());
-//        plantOutput.setSummerFertilizer(editTextSummerFertilizer.getText().toString());
-//        plantOutput.setProtection(editTextProtection.getText().toString());
-//        plantOutput.setBadCompanion(editTextBadCompanion.getText().toString());
-//
-//        plantOutput.setId(plant.getId());
-//        plantOutput.setStatus("custom");
-//
-//        return plantOutput;
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,15 +150,16 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         switch (item.getItemId()){
             case R.id.update_plant_activity_menu:
-                Date date = null;
-                try {
-                    date = plantDb.stringToDate(textViewSetPlantingDate.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+//                Date date = null;
+//                try {
+//                    date = plantDb.stringToDate(textViewSetPlantingDate.getText().toString());
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
                 plantOutput = plantInput;
 //                plantOutput = new Plant(editTextPlantName.getText().toString(), "custom", date);
 //                plantOutput.setIsPlanted(plantInput.getIsPlanted());
@@ -199,7 +171,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
                 if (!textViewSetPlantingDate.getText().toString().isEmpty()) {
                     try {
-                        plantOutput.setPlantingDate(plantDb.stringToDate(textViewSetPlantingDate.getText().toString()));
+                        plantOutput.setPlantingDate(simpleDateFormat.parse(textViewSetPlantingDate.getText().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -207,7 +179,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
                 if (!textViewWateringDate.getText().toString().isEmpty()) {
                     try {
-                        plantOutput.setWateringDate(plantDb.stringToDate(textViewWateringDate.getText().toString()));
+                        plantOutput.setWateringDate(simpleDateFormat.parse(textViewWateringDate.getText().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -216,7 +188,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
                 if (!textViewFertilizingDate.getText().toString().isEmpty()) {
                     try {
-                        plantOutput.setFertilizingDate(plantDb.stringToDate(textViewFertilizingDate.getText().toString()));
+                        plantOutput.setFertilizingDate(simpleDateFormat.parse(textViewFertilizingDate.getText().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -225,7 +197,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
                 if (!textViewMonitoringDate.getText().toString().isEmpty()) {
                     try {
-                        plantOutput.setMonitoringDate(plantDb.stringToDate(textViewMonitoringDate.getText().toString()));
+                        plantOutput.setMonitoringDate(simpleDateFormat.parse(textViewMonitoringDate.getText().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -234,7 +206,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
 
                 if (!textViewHarvestingDate.getText().toString().isEmpty()) {
                     try {
-                        plantOutput.setHarvestingDate(plantDb.stringToDate(textViewHarvestingDate.getText().toString()));
+                        plantOutput.setHarvestingDate(simpleDateFormat.parse(textViewHarvestingDate.getText().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -250,7 +222,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
                 if (!plantOutput.getPlantName().equals("")) {
 
                     setAllRemainingReminders(plantOutput, UpdatePlantActivity.this, "updatePlAct");
-                    updateDbEntity(plantOutput, mContext);
+                    updateDbEntity(plantOutput, appContext);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Plant attributes was not updated. Plant name can't be empty.", Toast.LENGTH_LONG).show();
@@ -264,18 +236,14 @@ public class UpdatePlantActivity extends AppCompatActivity {
     }
 
     public void updateDbEntity(Plant plantOut, Context context1) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
                 Log.d("isPlanted in UpdatePlantActivity", "isPlanted" +plantOut.getIsPlanted()+"    ");
+        plantRepository = new PlantRepository(getApplication());
 
-                plantDb.plantDao().update(plantOut);
-            }
-        });
+                plantRepository.update(plantOut);
         Toast.makeText(context1, "Plant attributes was updated.", Toast.LENGTH_SHORT).show();
 
     }
+
 
     public void setDate(TextView textView, Context context1){
         // Get Current Date
@@ -403,22 +371,8 @@ Log.d("update obj: ", "watering millis:    " + millis);
         AlarmManager alarmManager = (AlarmManager) context1.getSystemService(Context.ALARM_SERVICE);
 
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
-//        Log.d("update obj: ", plantInput.getPlantName() + "    " + millis);
     }
 
-//    public Plant getPlantFromDb(int plantId){
-//        UpdatePlantActivity.this.runOnUiThread(new Runnable() {
-//            public void run() {
-//                Log.d("UI thread", "I am the UI thread");
-//                plantFromDb = plantDb.plantDao().getPlantById(plantId);
-//                Log.d("tagtag","upd class, plantFroDb.getPlantName(): " + plantFromDb.getPlantName()+ plantFromDb.getHarvestingDate());
-//
-//            }
-//        });
-//        Log.d("tagtag","out of thread , upd class, plantFroDb.getPlantName(): " + plantFromDb.getPlantName()+ plantFromDb.getHarvestingDate());
-//
-//    return plantFromDb;
-//    }
 
 
 }

@@ -132,7 +132,6 @@ Log.d("isPlanted", "isPlanted" +plant.getIsPlanted()+"    ");
         switch (item.getItemId()){
             case R.id.main_activity_menu:
 
-                updateDefaultPlantsWithData();
 
                 Intent intent = new Intent(MainActivity.this,AddPlantActivity.class);
                 startActivity(intent);
@@ -142,75 +141,5 @@ Log.d("isPlanted", "isPlanted" +plant.getIsPlanted()+"    ");
         }
     }
 
-    private void updateDefaultPlantsWithData() {
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                plantRepository = new PlantRepository(getApplication());
-                Plant plant1 = plantRepository.getPlantById(1);
-
-                if (!plant1.getPlantName().isEmpty()) {
-
-                    Plant plant2 = plantRepository.getPlantById(2);
-                    Plant plant3 = plantRepository.getPlantById(3);
-                    Plant plant4 = plantRepository.getPlantById(4);
-                    Plant plant5 = plantRepository.getPlantById(5);
-
-                    plant1.setWateringPeriodInDays(8);
-                    plant1.setFertilizingPeriodInDays(30);
-                    plant1.setMonitoringPeriodInDays(12);
-                    plant1.setVegetationPeriodInDays(120);
-                    plant1.setSpringFertilizer("springFertilizer plant1");
-                    plant1.setSummerFertilizer("summerFertilizer plant1");
-                    plant1.setProtection("protection plant1");
-                    plant1.setBadCompanion("badCompanion plant1");
-                    plantRepository.update(plant1);
-
-                    plant2.setWateringPeriodInDays(10);
-                    plant2.setFertilizingPeriodInDays(28);
-                    plant2.setMonitoringPeriodInDays(14);
-                    plant2.setVegetationPeriodInDays(110);
-                    plant2.setSpringFertilizer("springFertilizer plant2");
-                    plant2.setSummerFertilizer("summerFertilizer plant2");
-                    plant2.setProtection("protection plant2");
-                    plant2.setBadCompanion("badCompanion plant2");
-                    plantRepository.update(plant2);
-
-                    plant3.setWateringPeriodInDays(9);
-                    plant3.setFertilizingPeriodInDays(24);
-                    plant3.setMonitoringPeriodInDays(16);
-                    plant3.setVegetationPeriodInDays(130);
-                    plant3.setSpringFertilizer("springFertilizer plant3");
-                    plant3.setSummerFertilizer("summerFertilizer plant3");
-                    plant3.setProtection("protection plant3");
-                    plant3.setBadCompanion("badCompanion plant3");
-                    plantRepository.update(plant3);
-
-                    plant4.setWateringPeriodInDays(11);
-                    plant4.setFertilizingPeriodInDays(25);
-                    plant4.setMonitoringPeriodInDays(18);
-                    plant4.setVegetationPeriodInDays(115);
-                    plant4.setSpringFertilizer("springFertilizer plant4");
-                    plant4.setSummerFertilizer("summerFertilizer plant4");
-                    plant4.setProtection("protection plant4");
-                    plant4.setBadCompanion("badCompanion plant4");
-                    plantRepository.update(plant4);
-
-                    plant5.setWateringPeriodInDays(13);
-                    plant5.setFertilizingPeriodInDays(33);
-                    plant5.setMonitoringPeriodInDays(12);
-                    plant5.setVegetationPeriodInDays(111);
-                    plant5.setSpringFertilizer("springFertilizer plant5");
-                    plant5.setSummerFertilizer("summerFertilizer plant5");
-                    plant5.setProtection("protection plant5");
-                    plant5.setBadCompanion("badCompanion plant5");
-                    plantRepository.update(plant5);
-
-                }
-            }
-        });
-    }
 
 }
