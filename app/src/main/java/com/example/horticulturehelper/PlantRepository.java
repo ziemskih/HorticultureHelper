@@ -63,7 +63,7 @@ public class PlantRepository {
 
     public Plant getPlantById(int plantId){return plantDao.getPlantById(plantId);};
 
-
+    public int getLastPlantId() {return plantDao.getLastPlantId();}
 
 //    public LiveData<Plant> getPlantById(int id){
 //        return plantDao.getPlantById(id);

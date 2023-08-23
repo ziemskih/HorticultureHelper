@@ -94,7 +94,8 @@ public class AddPlantActivity extends AppCompatActivity {
                                         plant.setStatus("custom");
                                         plant.setId(setNextId()+1);
                                         plant.setIsPlanted(false);
-                                        plantDb.plantDao().insert(plant);
+                                        plantViewModel.insert(plant);
+//                                        plantDb.plantDao().insert(plant);
                                         setReminder(plant);
 
                                     }
@@ -148,7 +149,9 @@ public class AddPlantActivity extends AppCompatActivity {
     }
 
     public int setNextId(){
-        int nextId = plantDb.plantDao().getLastPlantId();
+//        int nextId = plantDb.plantDao().getLastPlantId();
+        int nextId = plantViewModel.getLastPlantId();
+
         return nextId;
     }
 

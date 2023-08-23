@@ -48,7 +48,7 @@ Log.d("isPlanted in ViewPlantDetailsActivity", "isPlanted" +plant.getIsPlanted()
             textView.append(Html.fromHtml("<b>Planting date:</b>",Html.FROM_HTML_MODE_LEGACY));
             textView.append("       " + dateToString(plant.getPlantingDate())+ "\n");
             textView.append(Html.fromHtml("<b>Watering date:<b>",Html.FROM_HTML_MODE_LEGACY));
-            if (plant.getWateringDate() == null)
+            if (plant.getWateringDate() == null || plant.getWateringDate().getTime() == 0)
                 textView.append("       " + notSet + "\n");
             else textView.append("      " + dateToString(plant.getWateringDate()) + "\n");
             textView.append(Html.fromHtml("<b>Watering period:<b>",Html.FROM_HTML_MODE_LEGACY));
@@ -57,7 +57,7 @@ Log.d("isPlanted in ViewPlantDetailsActivity", "isPlanted" +plant.getIsPlanted()
             else textView.append("       " + plant.getWateringPeriodInDays() + "\n");
 
             textView.append(Html.fromHtml("<b>Fertilizing date:<b>",Html.FROM_HTML_MODE_LEGACY));
-            if (plant.getFertilizingDate() == null)
+            if (plant.getFertilizingDate() == null || plant.getFertilizingDate().getTime() == 0)
                 textView.append("       " + notSet + "\n");
             else textView.append("   " + dateToString(plant.getFertilizingDate()) + "\n");
             textView.append(Html.fromHtml("<b>Fertilizing period:<b>",Html.FROM_HTML_MODE_LEGACY));
@@ -66,7 +66,7 @@ Log.d("isPlanted in ViewPlantDetailsActivity", "isPlanted" +plant.getIsPlanted()
             else textView.append("       " + plant.getFertilizingPeriodInDays() + "\n");
 
             textView.append(Html.fromHtml("<b>Monitoring date:<b>",Html.FROM_HTML_MODE_LEGACY));
-            if (plant.getMonitoringDate() == null)
+            if (plant.getMonitoringDate() == null || plant.getMonitoringDate().getTime() == 0)
                 textView.append("       " + notSet + "\n");
             else textView.append("  " + dateToString(plant.getMonitoringDate()) + "\n");
 
@@ -76,7 +76,7 @@ Log.d("isPlanted in ViewPlantDetailsActivity", "isPlanted" +plant.getIsPlanted()
             else textView.append("       " + plant.getMonitoringPeriodInDays() + "\n");
 
             textView.append(Html.fromHtml("<b>Harvesting date:<b>"));
-            if (plant.getHarvestingDate() == null)
+            if (plant.getHarvestingDate() == null || plant.getHarvestingDate().getTime() == 0)
                 textView.append("       " + notSet + "\n");
             else textView.append("  " + dateToString(plant.getHarvestingDate()) + "\n");
 

@@ -13,6 +13,7 @@ public class PlantViewModel extends AndroidViewModel {
     private PlantRepository repository;
     private LiveData<List<Plant>> plants;
     private LiveData<List<Plant>> plants2;
+    int id;
 
     public PlantViewModel(@NonNull Application application) {
         super(application);
@@ -20,6 +21,7 @@ public class PlantViewModel extends AndroidViewModel {
         repository = new PlantRepository(application);
         plants = repository.getCustomPlants();
         plants2 = repository.getDefaultPlants();
+        id = repository.getLastPlantId();
 
 
     }
@@ -38,6 +40,8 @@ public class PlantViewModel extends AndroidViewModel {
     public LiveData<List<Plant>> getCustomPlants(){
         return plants;
     }
+
+    public int getLastPlantId() {return id;}
 
 
 

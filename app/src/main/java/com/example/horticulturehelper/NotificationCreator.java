@@ -12,6 +12,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.Calendar;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,11 +40,6 @@ public class NotificationCreator extends BroadcastReceiver {
         Plant plant = (Plant) intent.getSerializableExtra("plant");
         int randomNumber = (int) (Math.random()*10000);
         String eventName = intent.getStringExtra("eventName");
-        if (eventName.equals("to plant")) {
-
-//            int plantId = intent.getIntExtra("plantId", -1);
-//            plant.setId(plantId);
-        }
         String plantName = plant.getPlantName();
         Log.d("notif obj","plantobj: "+ plant.getPlantName()+"     "+"plantId"+plant.getId()+"     "+"plantingDate"+plant.getPlantingDate());
 
@@ -58,11 +54,22 @@ public class NotificationCreator extends BroadcastReceiver {
         PendingIntent donePendingIntent = PendingIntent.getBroadcast(context, randomNumber, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 //        mainActivity.setAllPlantReminders(plant);
 
-
+        Calendar calendar = Calendar.getInstance();
         Notification.Builder builder = new Notification.Builder(context,CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Reminder")
                 .setContentText("It's time " + eventName + " " + plantName);
+
+        if (eventName.equals("to fertilize") && calendar.get(Calendar.MONTH) < 7)
+        builder.setStyle(new Notification.BigTextStyle().bigText("It's time " + eventName + " " + plantName + ".\nRecommended fertilizer:\n" + plant.getSpringFertilizer()));
+
+        else if (eventName.equals("to fertilize") && calendar.get(Calendar.MONTH) > 6) {
+            builder.setStyle(new Notification.BigTextStyle().bigText("It's time " + eventName + " " + plantName + ".\nRecommended fertilizer:\n" + plant.getSummerFertilizer()));
+        }
+        if (eventName.equals("to monitor")) {
+            builder.setStyle(new Notification.BigTextStyle().bigText("It's time " + eventName + " " + plantName + ".\nRecommended protection:\n" + plant.getProtection()));
+        }
+
         builder.addAction(R.drawable.action_button_icon, "DONE",donePendingIntent);
         builder.addAction(R.drawable.action_button_icon, "Update plant",updatePendingIntent);
 

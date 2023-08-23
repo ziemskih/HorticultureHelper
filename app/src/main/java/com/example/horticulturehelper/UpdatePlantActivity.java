@@ -327,7 +327,7 @@ public class UpdatePlantActivity extends AppCompatActivity {
                     case 2:
                         intent1.putExtra("eventName", "to water");
                         reqCode = plant.getId() * 100 + i;
-                        millis = plant.getPlantingDate().getTime() + 30000L * plant.getWateringPeriodInDays();
+                        millis = plant.getPlantingDate().getTime() + 60000L * plant.getWateringPeriodInDays();
                         if (callerClass.equals("doneBtnRec")){
                             plant.setWateringDate(new Date(millis));
                         }
@@ -341,7 +341,7 @@ Log.d("update obj: ", "watering millis:    " + millis);
                     case 3:
                         intent1.putExtra("eventName", "to fertilize");
                         reqCode = plant.getId() * 100 + i;
-                        millis = plant.getPlantingDate().getTime() +30000L * plant.getFertilizingPeriodInDays();
+                        millis = plant.getPlantingDate().getTime() +60000L * plant.getFertilizingPeriodInDays();
                         if (callerClass.equals("doneBtnRec")){
                             plant.setFertilizingDate(new Date(millis));
                         }
@@ -355,7 +355,7 @@ Log.d("update obj: ", "watering millis:    " + millis);
                     case 4:
                         intent1.putExtra("eventName", "to monitor");
                         reqCode = plant.getId() * 100 + i;
-                        millis = plant.getPlantingDate().getTime() + 30000L * plant.getMonitoringPeriodInDays();
+                        millis = plant.getPlantingDate().getTime() + 60000L * plant.getMonitoringPeriodInDays();
                         if (callerClass.equals("doneBtnRec")){
                             plant.setMonitoringDate(new Date(millis));
                         }
@@ -369,7 +369,7 @@ Log.d("update obj: ", "watering millis:    " + millis);
                     case 5:
                         intent1.putExtra("eventName", "to harvest");
                         reqCode = plant.getId() * 100 + i;
-                        millis = plant.getPlantingDate().getTime() + 30000L * plant.getVegetationPeriodInDays();
+                        millis = plant.getPlantingDate().getTime() + 60000L * plant.getVegetationPeriodInDays();
                         if (callerClass.equals("doneBtnRec")){
                             plant.setHarvestingDate(new Date(millis));
                             updateDbEntity(plant, context1);

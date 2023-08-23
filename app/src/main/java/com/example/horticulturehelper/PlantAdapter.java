@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder> {
@@ -37,11 +38,11 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
 
         Plant currentPlant = plants.get(position);
         holder.textViewPlantName.setText(currentPlant.getPlantName());
-        if (currentPlant.getIsPlanted()){
-            holder.textViewUpcoming.setText(getSmallestDate(currentPlant));
+        if (currentPlant.getIsPlanted()==null || !currentPlant.getIsPlanted()){
+            holder.textViewUpcoming.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(currentPlant.getPlantingDate()));
         }
         else
-        holder.textViewUpcoming.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(currentPlant.getPlantingDate()));
+            holder.textViewUpcoming.setText(getSmallestDate(currentPlant));
 
     }
 
@@ -52,23 +53,24 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
         long fertilizingDateInMillis = 0;
         long monitoringDateInMillis = 0;
         long harvestingDateInMillis = 0;
-        long largeNumber = 4611686018427L;
+        long largeNumber = System.currentTimeMillis() + 1577846300000L;
+        // setting currentTime+50years to largeNumber
 
-        if (plant.getWateringDate() != null)
-            wateringDateInMillis = plant.getWateringDate().getTime();
-        else wateringDateInMillis = largeNumber;
+        if (plant.getWateringDate() == null || plant.getWateringDate().getTime() == 0)
+            wateringDateInMillis = largeNumber;
+        else wateringDateInMillis = plant.getWateringDate().getTime();
 
-        if (plant.getFertilizingDate() != null)
-            fertilizingDateInMillis = plant.getFertilizingDate().getTime();
-        else fertilizingDateInMillis = largeNumber;
+        if (plant.getFertilizingDate() == null || plant.getFertilizingDate().getTime() == 0)
+            fertilizingDateInMillis = largeNumber;
+        else fertilizingDateInMillis = plant.getFertilizingDate().getTime();
 
-        if (plant.getMonitoringDate() != null)
-            monitoringDateInMillis = plant.getMonitoringDate().getTime();
-        else monitoringDateInMillis = largeNumber;
+        if (plant.getMonitoringDate() == null || plant.getMonitoringDate().getTime() == 0)
+            monitoringDateInMillis = largeNumber;
+        else monitoringDateInMillis = plant.getMonitoringDate().getTime();
 
-        if (plant.getHarvestingDate() != null)
-            harvestingDateInMillis = plant.getHarvestingDate().getTime();
-        else harvestingDateInMillis = largeNumber;
+        if (plant.getHarvestingDate() == null || plant.getHarvestingDate().getTime() == 0)
+            harvestingDateInMillis = largeNumber;
+        else harvestingDateInMillis = plant.getHarvestingDate().getTime();
 
         long smallestDate = Math.min(wateringDateInMillis,Math.min(monitoringDateInMillis,Math.min(fertilizingDateInMillis,harvestingDateInMillis)));
 

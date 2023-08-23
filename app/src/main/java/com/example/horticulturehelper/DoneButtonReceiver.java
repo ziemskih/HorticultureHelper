@@ -1,24 +1,20 @@
 package com.example.horticulturehelper;
 
+import static java.sql.Types.NULL;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 
-import androidx.room.Update;
-
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class DoneButtonReceiver extends BroadcastReceiver {
-    static Plant plant;
+    static Plant plantFromIntent;
+    static Plant plantFromDb;
     String eventName;
     PlantDatabase plantDatabase;
     Context context1;
@@ -27,68 +23,92 @@ public class DoneButtonReceiver extends BroadcastReceiver {
     int eventNumber;
     UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
     PlantRepository plantRepository;
+
 //    PlantDatabase plantDb = PlantDatabase.getInstance(get);
 
 
     @Override
     public void onReceive(Context context, Intent intent) {
         context1 = context;
-        plant = (Plant) intent.getSerializableExtra("plant");
+        plantFromIntent = (Plant) intent.getSerializableExtra("plant");
         eventName = intent.getStringExtra("eventName");
         plantDatabase = PlantDatabase.getInstance(context);
         plantRepository = new PlantRepository(updatePlantActivity.getApplication());
+        plantFromDb = plantRepository.getPlantById(plantFromIntent.getId());
+
 
         switch (eventName) {
             case "to plant":
-                plant.setIsPlanted(true);
-                updatePlantActivity.setAllRemainingReminders(plant, context1, "doneBtnRec");
-                updatePlantActivity.updateDbEntity(plant, context1);
+                plantFromIntent.setIsPlanted(true);
+                updatePlantActivity.setAllRemainingReminders(plantFromIntent, context1, "doneBtnRec");
+                updatePlantActivity.updateDbEntity(plantFromIntent, context1);
                 break;
             case "to water":
-                plant = plantRepository.getPlantById(plant.getId());
                 //getting plant object from DB by ID, because it needs updated attributes
-                Log.d("tagitagi", "from done plant ID:   "+plant.getId()+ plantRepository.getPlantById(plant.getId()).getPlantName()+plant.getId());
-                Log.d("donebut","donbut class, plantFroDb.getPlantName(): " + plant.getPlantName()+ plant.getHarvestingDate());
+                Log.d("tagitagi", "from done plant ID:   "+plantFromDb.getId()+ plantRepository.getPlantById(plantFromDb.getId()).getPlantName()+plantFromDb.getId());
+                Log.d("donebut","donbut class, plantFroDb.getPlantName(): " + plantFromDb.getPlantName()+ plantFromDb.getHarvestingDate());
 
-                millis = System.currentTimeMillis() + 60000 * plant.getWateringPeriodInDays();
-                plant.setWateringDate(new Date(millis));
+                millis = System.currentTimeMillis() + 60000 * plantFromDb.getWateringPeriodInDays();
+                plantFromDb.setWateringDate(new Date(millis));
                 eventNumber = 2;
-                updatePlantActivity.updateDbEntity(plant, context1);
+                updatePlantActivity.updateDbEntity(plantFromDb, context1);
                 setSingleReminder();
                 break;
             case "to fertilize":
-                plant = plantRepository.getPlantById(plant.getId());
-                millis = System.currentTimeMillis() + 60000 * plant.getFertilizingPeriodInDays();
-                plant.setFertilizingDate(new Date(millis));
+                millis = System.currentTimeMillis() + 60000 * plantFromDb.getFertilizingPeriodInDays();
+                plantFromDb.setFertilizingDate(new Date(millis));
                 eventNumber = 3;
-                updatePlantActivity.updateDbEntity(plant, context1);
+                updatePlantActivity.updateDbEntity(plantFromDb, context1);
                 setSingleReminder();
                 break;
             case "to monitor":
-                plant = plantRepository.getPlantById(plant.getId());
-                millis = System.currentTimeMillis() + 60000 * plant.getMonitoringPeriodInDays();
-                plant.setMonitoringDate(new Date(millis));
+                millis = System.currentTimeMillis() + 60000 * plantFromDb.getMonitoringPeriodInDays();
+                plantFromDb.setMonitoringDate(new Date(millis));
                 eventNumber = 4;
-                updatePlantActivity.updateDbEntity(plant, context1);
+                updatePlantActivity.updateDbEntity(plantFromDb, context1);
                 setSingleReminder();
                 break;
             case "to harvest":
-                plant = plantRepository.getPlantById(plant.getId());
-                millis = System.currentTimeMillis() + 60000 * plant.getVegetationPeriodInDays();
-                plant.setHarvestingDate(new Date(millis));
-                eventNumber = 5;
-                updatePlantActivity.updateDbEntity(plant, context1);
-                setSingleReminder();
+//                millis = System.currentTimeMillis() + 60000 * plant.getMonitoringPeriodInDays();
+                plantFromDb.setWateringDate(new Date(NULL));
+                plantFromDb.setFertilizingDate(new Date(NULL));
+                plantFromDb.setMonitoringDate(new Date(NULL));
+                plantFromDb.setHarvestingDate(new Date(NULL));
+                plantFromDb.setIsPlanted(false);
+                eventNumber = 4;
+                updatePlantActivity.updateDbEntity(plantFromDb, context1);
+                Intent cancelingIntent = new Intent(context1, NotificationCreator.class);
+
+                alarmCanceling(cancelingIntent);
+                Log.d("harvest", plantFromDb.getPlantName());
                 break;
         }
-
     }
-        private void setSingleReminder(){
-            Intent intent1 = new Intent(context1, NotificationCreator.class);
-            intent1.putExtra("plant", plant);
-            intent1.putExtra("eventName", eventName);
-            int reqCode = plant.getId() * 100 + eventNumber;
-            updatePlantActivity.setAlarm(context1, intent1, reqCode, millis);
+
+    private void alarmCanceling(Intent cancelingIntent) {
+        Log.d("alarmCanceling", "started");
+        PendingIntent pendingIntent;
+        AlarmManager alarmManager;
+
+        for (int eventNo = 2; eventNo < 6; eventNo++){
+            Log.d("cancelAlarm0", "reqCode: "+" eventNo "+eventNo );
+
+            int reqCode = plantFromDb.getId() * 100 + eventNo;
+            Log.d("cancelAlarm", "reqCode: "+reqCode+" eventNo "+eventNo );
+            pendingIntent = PendingIntent.getBroadcast(context1,
+                    reqCode, cancelingIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+            alarmManager = (AlarmManager) context1.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+        }
+    }
+
+    private void setSingleReminder(){
+        Intent intent1 = new Intent(context1, NotificationCreator.class);
+        intent1.putExtra("plant", plantFromIntent);
+        intent1.putExtra("eventName", eventName);
+        int reqCode = plantFromIntent.getId() * 100 + eventNumber;
+        updatePlantActivity.setAlarm(context1, intent1, reqCode, millis);
 
 
 
