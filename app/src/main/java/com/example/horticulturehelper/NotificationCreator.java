@@ -20,8 +20,6 @@ import java.util.concurrent.Executors;
 public class NotificationCreator extends BroadcastReceiver {
 
     private static final String CHANNEL_ID = "1";
-//    private MainActivity mainActivity = new MainActivity();
-//    PlantDatabase plantDatabase = PlantDatabase.getInstance(mainActivity.getApplicationContext());
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -52,7 +50,6 @@ public class NotificationCreator extends BroadcastReceiver {
         doneIntent.putExtra("eventName", eventName);
 
         PendingIntent donePendingIntent = PendingIntent.getBroadcast(context, randomNumber, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-//        mainActivity.setAllPlantReminders(plant);
 
         Calendar calendar = Calendar.getInstance();
         Notification.Builder builder = new Notification.Builder(context,CHANNEL_ID);
@@ -69,6 +66,9 @@ public class NotificationCreator extends BroadcastReceiver {
         if (eventName.equals("to monitor")) {
             builder.setStyle(new Notification.BigTextStyle().bigText("It's time " + eventName + " " + plantName + ".\nRecommended protection:\n" + plant.getProtection()));
         }
+        if (eventName.equals("to plant"))
+            builder.setStyle(new Notification.BigTextStyle().bigText("It's time " + eventName + " " + plantName + ".\nBad companion:\n" + plant.getBadCompanion()));
+
 
         builder.addAction(R.drawable.action_button_icon, "DONE",donePendingIntent);
         builder.addAction(R.drawable.action_button_icon, "Update plant",updatePendingIntent);

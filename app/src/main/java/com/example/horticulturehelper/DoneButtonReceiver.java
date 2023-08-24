@@ -16,15 +16,12 @@ public class DoneButtonReceiver extends BroadcastReceiver {
     static Plant plantFromIntent;
     static Plant plantFromDb;
     String eventName;
-    PlantDatabase plantDatabase;
     Context context1;
-    String str;
     long millis;
     int eventNumber;
     UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
     PlantRepository plantRepository;
 
-//    PlantDatabase plantDb = PlantDatabase.getInstance(get);
 
 
     @Override
@@ -32,9 +29,9 @@ public class DoneButtonReceiver extends BroadcastReceiver {
         context1 = context;
         plantFromIntent = (Plant) intent.getSerializableExtra("plant");
         eventName = intent.getStringExtra("eventName");
-        plantDatabase = PlantDatabase.getInstance(context);
         plantRepository = new PlantRepository(updatePlantActivity.getApplication());
         plantFromDb = plantRepository.getPlantById(plantFromIntent.getId());
+        //getting plant object from DB by ID, because it needs updated attributes
 
 
         switch (eventName) {
@@ -44,9 +41,6 @@ public class DoneButtonReceiver extends BroadcastReceiver {
                 updatePlantActivity.updateDbEntity(plantFromIntent, context1);
                 break;
             case "to water":
-                //getting plant object from DB by ID, because it needs updated attributes
-                Log.d("tagitagi", "from done plant ID:   "+plantFromDb.getId()+ plantRepository.getPlantById(plantFromDb.getId()).getPlantName()+plantFromDb.getId());
-                Log.d("donebut","donbut class, plantFroDb.getPlantName(): " + plantFromDb.getPlantName()+ plantFromDb.getHarvestingDate());
 
                 millis = System.currentTimeMillis() + 60000 * plantFromDb.getWateringPeriodInDays();
                 plantFromDb.setWateringDate(new Date(millis));
@@ -79,13 +73,13 @@ public class DoneButtonReceiver extends BroadcastReceiver {
                 updatePlantActivity.updateDbEntity(plantFromDb, context1);
                 Intent cancelingIntent = new Intent(context1, NotificationCreator.class);
 
-                alarmCanceling(cancelingIntent);
+                alarmCanceling(cancelingIntent, context1);
                 Log.d("harvest", plantFromDb.getPlantName());
                 break;
         }
     }
 
-    private void alarmCanceling(Intent cancelingIntent) {
+    public void alarmCanceling(Intent cancelingIntent, Context context) {
         Log.d("alarmCanceling", "started");
         PendingIntent pendingIntent;
         AlarmManager alarmManager;
@@ -95,10 +89,10 @@ public class DoneButtonReceiver extends BroadcastReceiver {
 
             int reqCode = plantFromDb.getId() * 100 + eventNo;
             Log.d("cancelAlarm", "reqCode: "+reqCode+" eventNo "+eventNo );
-            pendingIntent = PendingIntent.getBroadcast(context1,
+            pendingIntent = PendingIntent.getBroadcast(context,
                     reqCode, cancelingIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-            alarmManager = (AlarmManager) context1.getSystemService(Context.ALARM_SERVICE);
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(pendingIntent);
         }
     }

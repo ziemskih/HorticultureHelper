@@ -38,12 +38,12 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
 
         Plant currentPlant = plants.get(position);
         holder.textViewPlantName.setText(currentPlant.getPlantName());
-        if (currentPlant.getIsPlanted()==null || !currentPlant.getIsPlanted()){
-            holder.textViewUpcoming.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(currentPlant.getPlantingDate()));
+        if (currentPlant.getStatus().equals("custom")) {
+            if (currentPlant.getIsPlanted() == null || !currentPlant.getIsPlanted()) {
+                holder.textViewUpcoming.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(currentPlant.getPlantingDate()));
+            } else
+                holder.textViewUpcoming.setText(getSmallestDate(currentPlant));
         }
-        else
-            holder.textViewUpcoming.setText(getSmallestDate(currentPlant));
-
     }
 
     private String getSmallestDate(Plant plant) {

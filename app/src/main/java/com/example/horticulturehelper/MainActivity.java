@@ -29,8 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private PlantViewModel plantViewModel;
-    RecyclerView.ViewHolder viewHolder;
-    PlantRepository plantRepository;
+//    RecyclerView.ViewHolder viewHolder;
+    DoneButtonReceiver doneButtonReceiver;
+
 
 
     @Override
@@ -92,17 +93,14 @@ Log.d("isPlanted", "isPlanted" +plant.getIsPlanted()+"    ");
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                ExecutorService executorService = Executors.newSingleThreadExecutor();
-                                executorService.execute(new Runnable() {
-                                            @Override
-                                            public void run() {
-
                                                 plantViewModel.delete(adapter.getPlant(viewHolder.getAdapterPosition()));
+                                Intent cancelingIntent = new Intent(MainActivity.this, NotificationCreator.class);
+                                doneButtonReceiver = new DoneButtonReceiver();
+                                doneButtonReceiver.alarmCanceling(cancelingIntent, getApplicationContext());
+
 // viewHolder.getAdapterPosition() this code will determine which element we want to delete. But we didn't
 // specify any position in Dao class while writing a delete method. We send the plant object direclty.
 // We need to detect object in this position and we will write this process in the adapter class.
-                                            }
-                                });
                                 Toast.makeText(getApplicationContext(), "Plant has been deleted", Toast.LENGTH_SHORT).show();
                             }
                         })

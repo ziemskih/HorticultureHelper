@@ -235,12 +235,12 @@ public class UpdatePlantActivity extends AppCompatActivity {
         }
     }
 
-    public void updateDbEntity(Plant plantOut, Context context1) {
-                Log.d("isPlanted in UpdatePlantActivity", "isPlanted" +plantOut.getIsPlanted()+"    ");
-        plantRepository = new PlantRepository(getApplication());
+                public void updateDbEntity(Plant plantOut, Context context1) {
+                    Log.d("isPlanted in UpdatePlantActivity", "isPlanted" +plantOut.getIsPlanted()+"    ");
+                    plantRepository = new PlantRepository(getApplication());
 
-                plantRepository.update(plantOut);
-        Toast.makeText(context1, "Plant attributes was updated.", Toast.LENGTH_SHORT).show();
+                    plantRepository.update(plantOut);
+                    Toast.makeText(context1, "Plant attributes was updated.", Toast.LENGTH_SHORT).show();
 
     }
 
