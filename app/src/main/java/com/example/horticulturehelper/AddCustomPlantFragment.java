@@ -38,22 +38,22 @@ import java.util.concurrent.Executors;
 
 public class AddCustomPlantFragment extends Fragment {
 
-    EditText editTextPlantName;
-    TextView textViewSetPlantingDate;
-    EditText editTextWateringPeriod;
-    EditText editTextFertilizingPeriod;
-    EditText editTextMonitoringPeriod;
-    EditText editTextVegetationPeriod;
-    EditText editTextSpringFertilizer;
-    EditText editTextSummerFertilizer;
-    EditText editTextProtection;
-    EditText editTextBadCompanion;
+    private EditText editTextPlantName;
+    private TextView textViewSetPlantingDate;
+    private EditText editTextWateringPeriod;
+    private EditText editTextFertilizingPeriod;
+    private EditText editTextMonitoringPeriod;
+    private EditText editTextVegetationPeriod;
+    private EditText editTextSpringFertilizer;
+    private EditText editTextSummerFertilizer;
+    private EditText editTextProtection;
+    private EditText editTextBadCompanion;
 
     private PlantViewModel plantViewModel;
 
-    Button buttonCancel, buttonSave;
-    Plant plant = null;
-    UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
+    private Button buttonCancel, buttonSave;
+    private Plant plant = null;
+    private UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
 
 
     @Override
@@ -131,7 +131,7 @@ public class AddCustomPlantFragment extends Fragment {
 
         return view;
     }
-    public void savePlant() throws ParseException {
+    private void savePlant() throws ParseException {
         createPlantObject();
         if (!plant.getPlantName().isEmpty() && textViewSetPlantingDate.getText().toString().length()>1) {
             ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -161,7 +161,7 @@ public class AddCustomPlantFragment extends Fragment {
 
 //        finish();
     }
-    public void createPlantObject(){
+    private void createPlantObject(){
         String plantNameStr = editTextPlantName.getText().toString();
         String plantStatus = "custom";
         String plantingDateStr = (textViewSetPlantingDate.getText().toString());
@@ -206,7 +206,7 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
 
 
 
-    void setPlantingDateReminder() throws ParseException {
+    private void setPlantingDateReminder() throws ParseException {
         Log.d("hzz","setPlantingDateReminder started: ");
 //        Date date = new Date();
         Intent intent = new Intent(getContext(),NotificationCreator.class);

@@ -13,7 +13,7 @@ public class PlantViewModel extends AndroidViewModel {
     private PlantRepository repository;
     private LiveData<List<Plant>> plants;
     private LiveData<List<Plant>> plants2;
-    int id;
+    private int id;
 
     public PlantViewModel(@NonNull Application application) {
         super(application);

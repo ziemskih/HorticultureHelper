@@ -13,14 +13,14 @@ import java.util.Date;
 
 
 public class DoneButtonReceiver extends BroadcastReceiver {
-    static Plant plantFromIntent;
-    static Plant plantFromDb;
-    String eventName;
-    Context context1;
-    long millis;
-    int eventNumber;
-    UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
-    PlantRepository plantRepository;
+    private static Plant plantFromIntent;
+    private static Plant plantFromDb;
+    private String eventName;
+    private Context context1;
+    private long millis;
+    private int eventNumber;
+    private UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
+    private PlantRepository plantRepository;
 
 
 
@@ -41,7 +41,6 @@ public class DoneButtonReceiver extends BroadcastReceiver {
                 updatePlantActivity.updateDbEntity(plantFromIntent, context1);
                 break;
             case "to water":
-
                 millis = System.currentTimeMillis() + 60000 * plantFromDb.getWateringPeriodInDays();
                 plantFromDb.setWateringDate(new Date(millis));
                 eventNumber = 2;
@@ -79,7 +78,7 @@ public class DoneButtonReceiver extends BroadcastReceiver {
         }
     }
 
-    public void alarmCanceling(Intent cancelingIntent, Context context, Plant plantCancel) {
+    protected void alarmCanceling(Intent cancelingIntent, Context context, Plant plantCancel) {
         Log.d("alarmCanceling", "started");
         PendingIntent pendingIntent;
         AlarmManager alarmManager;

@@ -126,7 +126,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
 
 
     }
-    public  interface OnItemClickListener{
+    public interface OnItemClickListener{
 
         void onItemClick(Plant plant);
 

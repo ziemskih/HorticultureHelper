@@ -40,7 +40,6 @@ public class AddPlantActivity extends AppCompatActivity {
     private PlantViewModel plantViewModel;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +115,7 @@ public class AddPlantActivity extends AppCompatActivity {
         });
 
     }
-    void setReminder(Plant plant) {
+    private void setReminder(Plant plant) {
         Intent intent = new Intent(this,NotificationCreator.class);
         intent.putExtra("eventName", "to plant");
         intent.putExtra("plant", plant);
@@ -141,7 +140,7 @@ public class AddPlantActivity extends AppCompatActivity {
         Log.d("hzz","setReminder3 "  +millis+ new Date(millis));
     }
 
-    public int setNextId(){
+    private int setNextId(){
         int nextId = plantViewModel.getLastPlantId();
 
         return nextId;

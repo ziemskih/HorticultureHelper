@@ -75,7 +75,7 @@ public abstract class PlantDatabase extends RoomDatabase {
         }
     };
 
-    public static Plant addPlantAttributes(Plant plant){
+    private static Plant addPlantAttributes(Plant plant){
         switch (plant.getId()){
 
             case 1:
@@ -138,7 +138,7 @@ public abstract class PlantDatabase extends RoomDatabase {
 
     }
 
-    public static Date stringToDate(String dateToparse) throws ParseException {
+    private static Date stringToDate(String dateToparse) throws ParseException {
 
         Date dateParsed = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateToparse);
         Log.d("taglog1", "dateToparse: "+dateToparse+"  "+ "dateParsed: "+dateParsed);

@@ -20,8 +20,8 @@ import java.util.concurrent.Executors;
 
 public class ViewPlantDetailsActivity extends AppCompatActivity {
 
-    Plant plant;
-    TextView textView;
+    private Plant plant;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ Log.d("isPlanted in ViewPlantDetailsActivity", "isPlanted" +plant.getIsPlanted()
 //plant details layout, plant update button, pass plant object to updatePlantActivity
 
     }
-    void displayPlantDetails() {
+    private void displayPlantDetails() {
 
         textView.setText(Html.fromHtml("<b>Plant name:</b>",Html.FROM_HTML_MODE_LEGACY));
         textView.append("       " + plant.getPlantName()+ "\n");
@@ -111,7 +111,7 @@ Log.d("isPlanted in ViewPlantDetailsActivity", "isPlanted" +plant.getIsPlanted()
 
     }
 
-    public String dateToString(Date dateToparse) throws ParseException {
+    protected String dateToString(Date dateToparse) throws ParseException {
 
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(dateToparse);
 

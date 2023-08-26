@@ -32,7 +32,6 @@ public class NotificationCreator extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
         }
 
-        Random r = new Random();
 //        int randomNumber = r.nextInt(175 - 18) + 18;
 //        String plantName = intent.getStringExtra("plantName");
         Plant plant = (Plant) intent.getSerializableExtra("plant");

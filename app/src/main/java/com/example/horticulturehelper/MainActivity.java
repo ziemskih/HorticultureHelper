@@ -29,10 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private PlantViewModel plantViewModel;
-//    RecyclerView.ViewHolder viewHolder;
-    DoneButtonReceiver doneButtonReceiver;
-
-
+    private DoneButtonReceiver doneButtonReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
