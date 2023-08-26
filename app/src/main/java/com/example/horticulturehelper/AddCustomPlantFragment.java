@@ -1,40 +1,27 @@
 package com.example.horticulturehelper;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
-
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 public class AddCustomPlantFragment extends Fragment {
 
@@ -48,11 +35,10 @@ public class AddCustomPlantFragment extends Fragment {
     private EditText editTextSummerFertilizer;
     private EditText editTextProtection;
     private EditText editTextBadCompanion;
+    private Button buttonCancel, buttonSave;
 
     private PlantViewModel plantViewModel;
-
-    private Button buttonCancel, buttonSave;
-    private Plant plant = null;
+    private Plant plant;
     private UpdatePlantActivity updatePlantActivity = new UpdatePlantActivity();
 
 
@@ -72,7 +58,6 @@ public class AddCustomPlantFragment extends Fragment {
         editTextSummerFertilizer = view.findViewById(R.id.editTextSummerFertilizer);
         editTextProtection = view.findViewById(R.id.editTextProtection);
         editTextBadCompanion = view.findViewById(R.id.editTextBadCompanion);
-
         buttonCancel = view.findViewById(R.id.buttonCancel);
         buttonSave = view.findViewById(R.id.buttonSave);
 
@@ -82,7 +67,6 @@ public class AddCustomPlantFragment extends Fragment {
 
                 updatePlantActivity.setDate(textViewSetPlantingDate, getContext());
             }
-
         });
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -90,29 +74,22 @@ public class AddCustomPlantFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
                 builder.setTitle("Adding plant")
                         .setMessage("Do you want to add this plant?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                               finish();
-
                                 try {
                                     savePlant();
-
                                 } catch (ParseException e) {
                                     e.printStackTrace();
-
                                 }
-                                getActivity().getSupportFragmentManager().popBackStack();
 
+                                getActivity().getSupportFragmentManager().popBackStack();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                dialog.cancel();
-
                             }
                         });
                 //Creating dialog box
@@ -141,8 +118,6 @@ public class AddCustomPlantFragment extends Fragment {
                     plant.setStatus("custom");
                     plant.setId(plantViewModel.getLastPlantId() + 1);
                     plant.setIsPlanted(false);
-
-//                    plantDb.plantDao().insert(plant);
                     plantViewModel.insert(plant);
                     try {
                         setPlantingDateReminder();
@@ -156,16 +131,13 @@ public class AddCustomPlantFragment extends Fragment {
         else {
             Toast.makeText(getContext(), "Plant wasn't added. Plant name and planting date input is required.", Toast.LENGTH_LONG).show();
         }
-
-
-
-//        finish();
     }
+
     private void createPlantObject(){
         String plantNameStr = editTextPlantName.getText().toString();
         String plantStatus = "custom";
         String plantingDateStr = (textViewSetPlantingDate.getText().toString());
-Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toString());
+
         Date dateParsed = null;
         try {
             dateParsed = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(plantingDateStr);
@@ -200,80 +172,22 @@ Log.d("hzz", plantingDateStr+".     ."+textViewSetPlantingDate.getText().toStrin
             plant.setProtection(plantProtectionStr);
         if (!plantBadCompanionStr.isEmpty())
             plant.setBadCompanion(plantBadCompanionStr);
-
-//        return plant;
     }
 
-
-
     private void setPlantingDateReminder() throws ParseException {
-        Log.d("hzz","setPlantingDateReminder started: ");
-//        Date date = new Date();
         Intent intent = new Intent(getContext(),NotificationCreator.class);
-//        int reqCode = (addPlantActivity.setNextId()+1)*100+1;
-        //requestCode setting with plantId*100+1
-//        int lastPlantId = plantDb.plantDao().getLastPlantId() + 1;
-//        plant.setId(lastPlantId);
-//        intent.putExtra("plantId", lastPlantId);
-//        intent.putExtra("plantName", editTextPlantName.getText().toString());
         intent.putExtra("eventName", "to plant");
         intent.putExtra("plant", plant);
 
-        Log.d("hzz","setReminder0 fra from intent: "+ intent.getStringExtra("plantName"));
         int reqCode = plant.getId() * 100 + 1;
-        Log.d("AddCustomPlantFragment: reqCode = plant.getId() * 100 + 1 = ", String.valueOf(reqCode));
         PendingIntent pendingIntent;
 
-            pendingIntent = PendingIntent.getBroadcast(getContext(),
+        pendingIntent = PendingIntent.getBroadcast(getContext(),
                     reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        Log.d("hzz","setReminder1 textViewSetPlantingDate: "+textViewSetPlantingDate.getText().toString());
-
         long millis = plant.getPlantingDate().getTime();
-        Log.d("hzz","setReminder1.1");
         AlarmManager alarmManager = (AlarmManager) requireActivity().getApplication().getSystemService(Context.ALARM_SERVICE);
-        Log.d("hzz","setReminder2");
- //       long millis = 1684798800000;
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,millis,pendingIntent);
-        Log.d("hzz","setReminder3 "  +millis+ new Date(millis));
     }
-
-//    public void setPlantingDate(TextView textView){
-//        final Calendar c = Calendar.getInstance();
-//        int mYear = c.get(Calendar.YEAR);
-//        int mMonth = c.get(Calendar.MONTH);
-//        int mDay = c.get(Calendar.DAY_OF_MONTH);
-//        int mHour = c.get(Calendar.HOUR_OF_DAY);
-//        int mMinute = c.get(Calendar.MINUTE);
-////        int mHour = Integer.parseInt((textView.getText().toString()).substring(11,13));
-//
-//        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
-//                new DatePickerDialog.OnDateSetListener() {
-//
-//                    @Override
-//                    public void onDateSet(DatePicker view, int year,
-//                                          int monthOfYear, int dayOfMonth) {
-////                        final Calendar newDate = Calendar.getInstance();
-//
-////                        date = date.concat(" 12:00");
-//                        TimePickerDialog time = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-//
-//                            @Override
-//                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                                String date = String.format("%d-%02d-%02d %02d:%02d", year,monthOfYear+1,dayOfMonth,hourOfDay,minute);
-//                                textView.setText(date);
-//
-////                                newDate.set(year, monthOfYear, dayOfMonth, hourOfDay, minute, 0);
-//                            }
-//                        }, mHour, mMinute, true);
-//                        time.show();
-//
-//                    }
-//                }, mYear, mMonth, mDay);
-//
-//        datePickerDialog.show();
-//
-//    }
-
 
 }

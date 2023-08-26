@@ -1,23 +1,17 @@
 package com.example.horticulturehelper;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity(tableName = "plant_table")
-//Room adnotation proccess. By writing this adnotation process  I enable RoomDatabase
-// to write neccesary code in the background. Now RoomDatabase will automatically create
-// required SQLite tables for Plant object
 
 public class Plant implements Serializable {
-//Plant class is entity class
+
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String plantName;
-//    @ColumnInfo(name = "plantingDate")
     private Date plantingDate;
     private Date wateringDate;
     private int wateringPeriodInDays;

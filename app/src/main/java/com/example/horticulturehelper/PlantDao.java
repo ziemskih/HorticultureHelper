@@ -9,12 +9,9 @@ import androidx.room.Update;
 import java.util.List;
 
 @Dao
-//annotation for RoomDB
 public interface PlantDao {
 
     @Insert
-//Annotation for RoomDB. We mustn't specify what should it do, because RoomDB does it after your
-//annotation
     void insert(Plant plant);
 
     @Update
@@ -34,9 +31,6 @@ public interface PlantDao {
 
     @Query("SELECT * FROM plant_table WHERE id = :plantId LIMIT 1")
     Plant getPlantById(int plantId);
-
-
-// LiveData will observe live data in DB and then reflect it to RecyclerView if there is a change
 
 
 }

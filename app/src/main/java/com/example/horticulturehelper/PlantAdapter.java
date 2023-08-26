@@ -1,24 +1,17 @@
 package com.example.horticulturehelper;
 
-import static java.sql.Types.NULL;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder> {
-//provide connection between data source (DB) and a view (RecyclerView)
 
+public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder> {
 
     private List<Plant> plants = new ArrayList<>();
     private OnItemClickListener listener;
@@ -28,8 +21,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
     public PlantHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.plant_item,parent,false);
-//describing specially designed layout named plant_item that will be shown on RecyclerView
-//ViewGroup parent is RecyclerView
+
         return new PlantHolder(view);
     }
 
@@ -47,12 +39,11 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
     }
 
     private String getSmallestDate(Plant plant) {
-        Log.d("PlantAdap", "plantname and id:  "+plant.getPlantName() + plant.getId());
 
-        long wateringDateInMillis = 0;
-        long fertilizingDateInMillis = 0;
-        long monitoringDateInMillis = 0;
-        long harvestingDateInMillis = 0;
+        long wateringDateInMillis;
+        long fertilizingDateInMillis;
+        long monitoringDateInMillis;
+        long harvestingDateInMillis;
         long largeNumber = System.currentTimeMillis() + 1577846300000L;
         // setting currentTime+50years to largeNumber
 
@@ -74,7 +65,6 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
 
         long smallestDate = Math.min(wateringDateInMillis,Math.min(monitoringDateInMillis,Math.min(fertilizingDateInMillis,harvestingDateInMillis)));
 
-
         return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(smallestDate);
     }
 
@@ -82,11 +72,10 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
     public int getItemCount() {
         return plants.size();
     }
+
     public void setPlants(List<Plant> plants){
-// observe changes with LiveData
         this.plants = plants;
         notifyDataSetChanged();
-//this method will alert the adapter if there is a change in the DB
 
     }
 
@@ -94,7 +83,6 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
         return plants.get(position);
 
     }
-
 
     class PlantHolder extends RecyclerView.ViewHolder{
 
@@ -112,18 +100,13 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantHolder>
                 public void onClick(View v) {
 
                     int position = getAdapterPosition();
-//this method will determine a position of plant clicked on
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-//checking list is null or not and checking whether RecyclerView is sending empty position or not
 
                         listener.onItemClick(plants.get(position));
-
                     }
                 }
             });
-
         }
-
 
     }
     public interface OnItemClickListener{

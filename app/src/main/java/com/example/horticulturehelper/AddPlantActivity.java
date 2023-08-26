@@ -1,44 +1,29 @@
 package com.example.horticulturehelper;
 
-import static java.security.AccessController.getContext;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AddPlantActivity extends AppCompatActivity {
 
     private PlantViewModel plantViewModel;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,25 +34,17 @@ public class AddPlantActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView2);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-// Standard code for recyclerView
 
         PlantAdapter adapter = new PlantAdapter();
         recyclerView.setAdapter(adapter);
-//assigning adapter object to RecyclerView
 
         plantViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication())
                 .create(PlantViewModel.class);
         plantViewModel.getDefaultPlants().observe(this, new Observer<List<Plant>>() {
-            //This is LiveData method and it will observe changes in the DB
+
             @Override
             public void onChanged(List<Plant> plants) {
-// This method will observe the changes
-
                 adapter.setPlants(plants);
-//updating RecyclerView
-//Whenever the onChanged method works corresponding table should be updated and
-// the adapter should be updated in the same way and the plants should be updated
-//in the array and then transfered to RecyclerView
             }
         });
 
@@ -81,21 +58,12 @@ public class AddPlantActivity extends AppCompatActivity {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                               finish();
-
-                                ExecutorService executorService = Executors.newSingleThreadExecutor();
-                                executorService.execute(new Runnable() {
-                                    @Override
-                                    public void run() {
 
                                         plant.setStatus("custom");
-                                        plant.setId(setNextId()+1);
+                                        plant.setId(plantViewModel.getLastPlantId()+1);
                                         plant.setIsPlanted(false);
                                         plantViewModel.insert(plant);
                                         setReminder(plant);
-
-                                    }
-                                });
 
                                 Toast.makeText(getApplicationContext(),"Plant was added",
                                         Toast.LENGTH_SHORT).show();
@@ -104,7 +72,6 @@ public class AddPlantActivity extends AppCompatActivity {
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //  Action for 'NO' Button
-//                                dialog.cancel();
 
                             }
                         });
@@ -120,30 +87,15 @@ public class AddPlantActivity extends AppCompatActivity {
         intent.putExtra("eventName", "to plant");
         intent.putExtra("plant", plant);
 
-        Log.d("hzz","setReminder0"+plant.getPlantName()+intent.getStringExtra("plantName")+intent.getIntExtra("plantId", -1));
-        Log.d("hzzz","plantname: "+plant.getPlantName()+plant.getPlantingDate()+plant.getId());
         PendingIntent pendingIntent;
         int reqCode = plant.getId() * 100 + 1;
-        Log.d("AddPlantActivity: reqCode = plant.getId() * 100 + 1 = ", String.valueOf(reqCode));
 
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                     reqCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-
-        Log.d("hzz","setReminder1");
         long millis = plant.getPlantingDate().getTime();
-
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Log.d("hzz","setReminder2");
-
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,millis,pendingIntent);
-        Log.d("hzz","setReminder3 "  +millis+ new Date(millis));
-    }
-
-    private int setNextId(){
-        int nextId = plantViewModel.getLastPlantId();
-
-        return nextId;
     }
 
     @Override
@@ -167,6 +119,7 @@ public class AddPlantActivity extends AppCompatActivity {
     }
 
     private void loadFragment(Fragment fragment) {
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frameLayout, new AddCustomPlantFragment())
@@ -178,4 +131,5 @@ public class AddPlantActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         return super.onSupportNavigateUp();
     }
+
 }

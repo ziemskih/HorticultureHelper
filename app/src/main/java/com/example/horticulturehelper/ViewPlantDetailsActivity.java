@@ -36,8 +36,6 @@ Log.d("isPlanted in ViewPlantDetailsActivity", "isPlanted" +plant.getIsPlanted()
 
         displayPlantDetails();
 
-//plant details layout, plant update button, pass plant object to updatePlantActivity
-
     }
     private void displayPlantDetails() {
 

@@ -23,31 +23,27 @@ public class PlantViewModel extends AndroidViewModel {
         plants2 = repository.getDefaultPlants();
         id = repository.getLastPlantId();
 
-
     }
     public void insert(Plant plant){
         repository.insert(plant);
     }
+
     public void update(Plant plant){
         repository.update(plant);
     }
+
     public void delete(Plant plant){
         repository.delete(plant);
     }
+
     public LiveData<List<Plant>> getDefaultPlants(){
         return plants2;
     }
+
     public LiveData<List<Plant>> getCustomPlants(){
         return plants;
     }
 
     public int getLastPlantId() {return id;}
-
-
-
-//    public LiveData<List<Plant>> getLastPlantId(){
-//        return repository.getLastPlantId();
-//    }
-
 
 }

@@ -8,14 +8,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
-
 import androidx.core.app.NotificationManagerCompat;
-
 import java.util.Calendar;
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class NotificationCreator extends BroadcastReceiver {
 
@@ -23,7 +17,6 @@ public class NotificationCreator extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("hzz","setReminder33");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "1", NotificationManager.IMPORTANCE_HIGH);
@@ -32,13 +25,11 @@ public class NotificationCreator extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
         }
 
-//        int randomNumber = r.nextInt(175 - 18) + 18;
-//        String plantName = intent.getStringExtra("plantName");
         Plant plant = (Plant) intent.getSerializableExtra("plant");
+        //creating randomNumber for notification id
         int randomNumber = (int) (Math.random()*10000);
         String eventName = intent.getStringExtra("eventName");
         String plantName = plant.getPlantName();
-        Log.d("notif obj","plantobj: "+ plant.getPlantName()+"     "+"plantId"+plant.getId()+"     "+"plantingDate"+plant.getPlantingDate());
 
         Intent updateIntent = new Intent(context, UpdatePlantActivity.class);
         updateIntent.putExtra("plant", plant);
@@ -74,7 +65,6 @@ public class NotificationCreator extends BroadcastReceiver {
 
         NotificationManagerCompat compat = NotificationManagerCompat.from(context);
         compat.notify(randomNumber,builder.build());
-        Log.d("hzz","notificatio id: "+ randomNumber+" randomNo: "+randomNumber);
 
     }
 
