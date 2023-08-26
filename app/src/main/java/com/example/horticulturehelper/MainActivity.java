@@ -93,10 +93,11 @@ Log.d("isPlanted", "isPlanted" +plant.getIsPlanted()+"    ");
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                                plantViewModel.delete(adapter.getPlant(viewHolder.getAdapterPosition()));
+                                Plant plantToDelete = adapter.getPlant(viewHolder.getAdapterPosition());
+                                                plantViewModel.delete(plantToDelete);
                                 Intent cancelingIntent = new Intent(MainActivity.this, NotificationCreator.class);
                                 doneButtonReceiver = new DoneButtonReceiver();
-                                doneButtonReceiver.alarmCanceling(cancelingIntent, getApplicationContext());
+                                doneButtonReceiver.alarmCanceling(cancelingIntent, getApplicationContext(), plantToDelete);
 
 // viewHolder.getAdapterPosition() this code will determine which element we want to delete. But we didn't
 // specify any position in Dao class while writing a delete method. We send the plant object direclty.

@@ -53,11 +53,11 @@ public abstract class PlantDatabase extends RoomDatabase {
                 public void run() {
                     try {
                         String currentYear = String.valueOf(Year.now().getValue());
-                        plantDao.insert(new Plant("Pomidorai", "default", stringToDate(currentYear + "-03-05 12:00")));
-                        plantDao.insert(new Plant("Agurkai", "default", stringToDate(currentYear + "-03-15 12:00")));
-                        plantDao.insert(new Plant("Ridikeliai", "default", stringToDate(currentYear + "-03-25 12:00")));
-                        plantDao.insert(new Plant("Svogūnai", "default", stringToDate(currentYear + "-04-26 12:00")));
-                        plantDao.insert(new Plant("Arbuzai", "default", stringToDate(currentYear + "-03-10 12:00")));
+                        plantDao.insert(new Plant("Pomidorai", "default", stringToDate(currentYear + "-03-15 12:00")));
+                        plantDao.insert(new Plant("Agurkai", "default", stringToDate(currentYear + "-04-01 12:00")));
+                        plantDao.insert(new Plant("Ridikėliai", "default", stringToDate(currentYear + "-03-01 12:00")));
+                        plantDao.insert(new Plant("Svogūnai", "default", stringToDate(currentYear + "-04-01 12:00")));
+                        plantDao.insert(new Plant("Arbūzai", "default", stringToDate(currentYear + "-04-15 12:00")));
 
                         for(int id=1; id<6; id++){
                             Plant plantOut = addPlantAttributes(plantDao.getPlantById(id));
@@ -79,25 +79,25 @@ public abstract class PlantDatabase extends RoomDatabase {
         switch (plant.getId()){
 
             case 1:
-                plant.setWateringPeriodInDays(8);
+                plant.setWateringPeriodInDays(7);
                 plant.setFertilizingPeriodInDays(30);
-                plant.setMonitoringPeriodInDays(12);
-                plant.setVegetationPeriodInDays(120);
-                plant.setSpringFertilizer("springFertilizer plant1");
-                plant.setSummerFertilizer("summerFertilizer plant1");
-                plant.setProtection("protection plant1");
-                plant.setBadCompanion("badCompanion plant1");
+                plant.setMonitoringPeriodInDays(7);
+                plant.setVegetationPeriodInDays(110);
+                plant.setSpringFertilizer("Vištų mėšlas");
+                plant.setSummerFertilizer("Kiaulių mėšlas");
+                plant.setProtection("Tabako lapų nuoviras, barstymas pelenais, muilo tirpalas");
+                plant.setBadCompanion("Žirniai, bulvės, kukurūzai, paprikos");
                 break;
 
             case 2:
-                plant.setWateringPeriodInDays(10);
-                plant.setFertilizingPeriodInDays(28);
-                plant.setMonitoringPeriodInDays(14);
-                plant.setVegetationPeriodInDays(110);
-                plant.setSpringFertilizer("springFertilizer plant2");
-                plant.setSummerFertilizer("summerFertilizer plant2");
-                plant.setProtection("protection plant2");
-                plant.setBadCompanion("badCompanion plant2");
+                plant.setWateringPeriodInDays(4);
+                plant.setFertilizingPeriodInDays(15);
+                plant.setMonitoringPeriodInDays(15);
+                plant.setVegetationPeriodInDays(80);
+                plant.setSpringFertilizer("Vištų mėšlas");
+                plant.setSummerFertilizer("Pelenai");
+                plant.setProtection("Tabako lapų nuoviras, barstymas pelenais, muilo tirpalas");
+                plant.setBadCompanion("Bulvės, ridikėliai, moliūgai");
                 break;
 
             case 3:
@@ -105,32 +105,32 @@ public abstract class PlantDatabase extends RoomDatabase {
                 plant.setFertilizingPeriodInDays(24);
                 plant.setMonitoringPeriodInDays(16);
                 plant.setVegetationPeriodInDays(130);
-                plant.setSpringFertilizer("springFertilizer plant3");
-                plant.setSummerFertilizer("summerFertilizer plant3");
-                plant.setProtection("protection plant3");
-                plant.setBadCompanion("badCompanion plant3");
+                plant.setSpringFertilizer("Vištų mėšlas");
+                plant.setSummerFertilizer("Kiaulių mėšlas");
+                plant.setProtection("Tabako lapų nuoviras, barstymas pelenais, muilo tirpalas");
+                plant.setBadCompanion("Brokoliai, kaliafiorai, agurkai, svogūnai");
                 break;
 
             case 4:
-                plant.setWateringPeriodInDays(11);
-                plant.setFertilizingPeriodInDays(25);
-                plant.setMonitoringPeriodInDays(18);
-                plant.setVegetationPeriodInDays(115);
-                plant.setSpringFertilizer("springFertilizer plant4");
-                plant.setSummerFertilizer("summerFertilizer plant4");
-                plant.setProtection("protection plant4");
-                plant.setBadCompanion("badCompanion plant4");
+                plant.setWateringPeriodInDays(4);
+                plant.setFertilizingPeriodInDays(15);
+                plant.setMonitoringPeriodInDays(15);
+                plant.setVegetationPeriodInDays(30);
+                plant.setSpringFertilizer("Vištų mėšlas");
+                plant.setSummerFertilizer("Kiaulių mėšlas");
+                plant.setProtection("Tabako lapų nuoviras, barstymas pelenais, muilo tirpalas");
+                plant.setBadCompanion("Ridikėliai, brokoliai, žirniai, bulvės");
                 break;
 
             case 5:
-                plant.setWateringPeriodInDays(13);
-                plant.setFertilizingPeriodInDays(33);
-                plant.setMonitoringPeriodInDays(12);
-                plant.setVegetationPeriodInDays(111);
-                plant.setSpringFertilizer("springFertilizer plant5");
-                plant.setSummerFertilizer("summerFertilizer plant5");
-                plant.setProtection("protection plant5");
-                plant.setBadCompanion("badCompanion plant5");
+                plant.setWateringPeriodInDays(5);
+                plant.setFertilizingPeriodInDays(30);
+                plant.setMonitoringPeriodInDays(7);
+                plant.setVegetationPeriodInDays(70);
+                plant.setSpringFertilizer("Vištų mėšlas");
+                plant.setSummerFertilizer("Kiaulių mėšlas");
+                plant.setProtection("Tabako lapų nuoviras, barstymas pelenais, muilo tirpalas");
+                plant.setBadCompanion("Pomidorai, paprikos, bulvės");
                 break;
 
         }

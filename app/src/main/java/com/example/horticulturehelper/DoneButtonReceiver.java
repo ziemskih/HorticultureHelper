@@ -73,13 +73,13 @@ public class DoneButtonReceiver extends BroadcastReceiver {
                 updatePlantActivity.updateDbEntity(plantFromDb, context1);
                 Intent cancelingIntent = new Intent(context1, NotificationCreator.class);
 
-                alarmCanceling(cancelingIntent, context1);
+                alarmCanceling(cancelingIntent, context1, plantFromDb);
                 Log.d("harvest", plantFromDb.getPlantName());
                 break;
         }
     }
 
-    public void alarmCanceling(Intent cancelingIntent, Context context) {
+    public void alarmCanceling(Intent cancelingIntent, Context context, Plant plantCancel) {
         Log.d("alarmCanceling", "started");
         PendingIntent pendingIntent;
         AlarmManager alarmManager;
@@ -87,7 +87,7 @@ public class DoneButtonReceiver extends BroadcastReceiver {
         for (int eventNo = 2; eventNo < 6; eventNo++){
             Log.d("cancelAlarm0", "reqCode: "+" eventNo "+eventNo );
 
-            int reqCode = plantFromDb.getId() * 100 + eventNo;
+            int reqCode = plantCancel.getId() * 100 + eventNo;
             Log.d("cancelAlarm", "reqCode: "+reqCode+" eventNo "+eventNo );
             pendingIntent = PendingIntent.getBroadcast(context,
                     reqCode, cancelingIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
